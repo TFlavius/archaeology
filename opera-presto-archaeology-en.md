@@ -1,4 +1,4 @@
-# The Engine We Lost: Digital Archeology of Opera Presto
+# The Engine We Lost: Digital Archaeology of Opera Presto
 
 > Disclaimer: Almost everything described below is legally questionable. I am not going to discuss this paradox; I think you understand why. But it explains why there is so little public information about the internal structure of Opera Presto (although I am aware of a few deep dives made in closed communities).<br />
 Another explanation is the sheer volume of work required on an undocumented codebase. Browser engines are genuine rocket science, and the Presto code is something else entirely. Figuring out layers of code in three different languages is almost beyond the power of a single human. AI agents, on the other hand, do this task perfectly; I used Fable/Opus and am very happy with the results.<br />
@@ -24,7 +24,7 @@ But the Opera Presto source code, despite the pleas of the community, remained c
 
 In November 2016, Opera Software ASA ceased to exist as a single entity, and in January 2017, someone "leaked" the ~2012 source code into the public domain. We don't know who did it, but thank you.
 
-## II. Digital Archeology of Three Million Lines of Code
+## II. Digital Archaeology of Three Million Lines of Code
 
 As I write this, it is mid-2026. 14 years is several generations of development in standards, hardware, source code, principles, and approaches. Digging into these sources is akin to excavating Pompeii; preserved under the ash of time is a cross-section of the developers' mindset from that era and the technological approaches that made the browser unique.
 
@@ -188,7 +188,7 @@ The graphics library is called VEGA, an acronym: "Library for **VE**ctor **G**ra
 
 A special mention goes to an Easter egg in the CSS parser. In the grammar, among other tokens, there is `CSS_TOK_DOUBLE_RAINBOW_FUNC`: Opera 11.60 introduced the `-o-double-rainbow()` gradient function. A Double Rainbow, hardcoded into the Bison grammar to allow developers "to sprinkle some vivid color into their web projects." It was elegant mockery of the standards and proof that the browser was made by real people with a great sense of humor, who clearly enjoyed their work.
 
-But the most "human" layer of this archeological dig lies in the comments left in the code. 1,409 TODOs, 1,859 FIXMEs, 1,449 XXXs, ~850 links to the internal `CORE-xxxxx` bug tracker, and ~690 to the desktop `DSK-xxxxx` tracker. But statistics don't convey tone. Here are my favorite finds:
+But the most "human" layer of this archaeological dig lies in the comments left in the code. 1,409 TODOs, 1,859 FIXMEs, 1,449 XXXs, ~850 links to the internal `CORE-xxxxx` bug tracker, and ~690 to the desktop `DSK-xxxxx` tracker. But statistics don't convey tone. Here are my favorite finds:
 
 ```cpp
 // Warning: some cargo cult programming ahead.
@@ -212,7 +212,7 @@ const LayoutCoord o(0); // Avoid an insane amount of "LayoutCoord(0)" below.
 OP_ASSERT(!"What to do, what to do, with this strange content type");
 ```
 
-It would be unfair to reduce this archeology strictly to curiosities. Inside Presto lie things that still command professional respect today.
+It would be unfair to reduce this archaeology strictly to curiosities. Inside Presto lie things that still command professional respect today.
 
 **Carakan** — the JavaScript engine — is a register-based virtual machine with JIT compilation to native code for **four architectures**: x86, x86-64, ARM (including Thumb), and MIPS; nearby in the utilities are assemblers for PowerPC and SuperH. Values are NaN-boxed (8 bytes on 32-bit platforms), and objects live on "hidden classes"—internal documentation calls this the Compact Object Model and boasts about reducing the overhead from 6–7 pointers per object down to one. The JIT performs type profiling directly in the bytecode and recompiles hot code as the picture becomes clearer. The regular expressions are also homegrown, and they have **their own separate JIT** for those same architectures. World-class work, executed by a single small team on their own infrastructure, without LLVM, in 2009.
 
