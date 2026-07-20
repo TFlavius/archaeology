@@ -1,3 +1,38 @@
+---
+layout: default
+title: "The Engine We Lost: Digital Archaeology of Opera Presto"
+description: "A deep dive into the leaked ~2012 source code of the Opera Presto browser engine."
+permalink: /
+lang: en
+---
+
+<nav id="top" aria-label="Language navigation">
+  <strong>English</strong> · <a href="{{ '/ru/' | relative_url }}" lang="ru">Русский</a>
+</nav>
+
+# The Engine We Lost: Digital Archaeology of Opera Presto
+
+## Contents
+
+- **[I. The Pre-Monopoly Era: What Opera Was and Why It’s Gone](#i-the-pre-monopoly-era-what-opera-was-and-why-its-gone)**
+- **[II. Digital Archaeology of Three Million Lines of Code](#ii-digital-archaeology-of-three-million-lines-of-code)**
+  - [II.I How was Opera Built?](#iii-how-was-opera-built)
+  - [II.II How was Opera Written?](#iiii-how-was-opera-written)
+  - [II.III How was Opera Tested?](#iiiii-how-was-opera-tested)
+  - [II.IV Who Wrote Opera?](#iiiv-who-wrote-opera)
+- **[III. A History of a Lie](#iii-a-history-of-a-lie)**
+  - [III.I The Uncuttable UI Monolith](#iiii-the-uncuttable-ui-monolith)
+  - [III.II Excuses Instead of Source Code](#iiiii-excuses-instead-of-source-code)
+- **[IV. Architectural Diamonds (and a bit of madness)](#iv-architectural-diamonds-and-a-bit-of-madness)**
+- **[V. Defrosting and Health Check](#v-defrosting-and-health-check)**
+  - [V.I Moving to OpenSSL](#vi-moving-to-openssl)
+  - [V.II Updating Third-Party Code](#vii-updating-third-party-code)
+  - [V.III The Death of Pike and Other Adventures](#viii-the-death-of-pike-and-other-adventures)
+  - [V.IV Museum of Dead Features](#viv-museum-of-dead-features)
+- **[VI. What's Next?](#vi-whats-next)**
+
+---
+
 # The Engine We Lost: Digital Archaeology of Opera Presto
 
 > Disclaimer: Almost everything described below is legally questionable. I am not going to discuss this paradox; I think you understand why. But it explains why there is so little public information about the internal structure of Opera Presto (although I am aware of a few deep dives made in closed communities).<br />
@@ -482,3 +517,9 @@ Also, there will be no links here to a Telegram channel, a Patreon, or anything 
 The point is that Opera was a browser built with love and understanding. You can see it in every line of code, from the "we don't need the STL" manifesto to the double rainbow in the CSS grammar. The refusal to publish the source code felt like an injustice back then—and judging by the fact that someone eventually leaked it anyway, the people inside the company felt the same way. Surely some of those people wished a deep dive like this would happen.
 
 Well, now it has.
+
+---
+
+<nav aria-label="Article navigation">
+  <a href="#top">↑ Back to top</a> · <strong>English</strong> · <a href="{{ '/ru/' | relative_url }}" lang="ru">Русский</a>
+</nav>

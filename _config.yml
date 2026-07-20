@@ -1,0 +1,10 @@
+theme: jekyll-theme-primer
+markdown: kramdown
+title: "The Engine We Lost: Digital Archaeology of Opera Presto"
+description: "A deep dive into the leaked ~2012 source code of the Opera Presto browser engine."
+lang: en
+encoding: utf-8
+
+# README is intended for visitors browsing the repository, not for the Pages site.
+exclude:
+  - readme.md
