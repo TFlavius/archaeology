@@ -4,20 +4,20 @@
 
 ## Оглавление [RU]
 
-* **[I. Эпоха до монополии: чем была Opera и почему её больше нет.](opera-presto-archaeology.md#i-эпоха-до-монополии-чем-была-opera-и-почему-её-больше-нет)**
-* **[II. Цифровая археология трёх миллионов строк кода.](opera-presto-archaeology.md#ii-цифровая-археология-трёх-миллионов-строк-кода)**
+* **[I. Эпоха до монополии: чем была Opera и почему её больше нет](opera-presto-archaeology.md#i-эпоха-до-монополии-чем-была-opera-и-почему-её-больше-нет)**
+* **[II. Цифровая археология трёх миллионов строк кода](opera-presto-archaeology.md#ii-цифровая-археология-трёх-миллионов-строк-кода)**
   * [II.I Как собиралась Opera?](opera-presto-archaeology.md#iii-как-собиралась-opera)
   * [II.II Как писалась Opera?](opera-presto-archaeology.md#iiii-как-писалась-opera)
   * [II.III Как тестировалась Опера?](opera-presto-archaeology.md#iiiii-как-тестировалась-опера)
   * [II.IV Кем написана Опера?](opera-presto-archaeology.md#iiiv-кем-написана-опера)
-* **[III. История одной лжи.](opera-presto-archaeology.md#iii-история-одной-лжи)**
+* **[III. История одной лжи](opera-presto-archaeology.md#iii-история-одной-лжи)**
   * [III.I Нераспиливаемый монолит UI.](opera-presto-archaeology.md#iiii-нераспиливаемый-монолит-ui)
   * [III.II Отговорки вместо исходников.](opera-presto-archaeology.md#iiiii-отговорки-вместо-исходников)
 * **[IV. Архитектурные бриллианты (и немного безумия)](opera-presto-archaeology.md#iv-архитектурные-бриллианты-и-немного-безумия)**
-* **[V. Разморозка и проверка работоспособности.](opera-presto-archaeology.md#v-разморозка-и-проверка-работоспособности)**
-  * [V.I Переезд на OpenSSL.](opera-presto-archaeology.md#vi-переезд-на-openssl)
-  * [V.II Обновление стороннего кода.](opera-presto-archaeology.md#vii-обновление-стороннего-кода)
-  * [V.III Смерть Pike и другие приключения.](opera-presto-archaeology.md#viii-смерть-pike-и-другие-приключения)
+* **[V. Разморозка и проверка работоспособности](opera-presto-archaeology.md#v-разморозка-и-проверка-работоспособности)**
+  * [V.I Переезд на OpenSSL](opera-presto-archaeology.md#vi-переезд-на-openssl)
+  * [V.II Обновление стороннего кода](opera-presto-archaeology.md#vii-обновление-стороннего-кода)
+  * [V.III Смерть Pike и другие приключения](opera-presto-archaeology.md#viii-смерть-pike-и-другие-приключения)
   * [V.IV Музей мёртвых фич](opera-presto-archaeology.md#viv-музей-мёртвых-фич)
 * **[VI. Что дальше?](opera-presto-archaeology.md#vi-что-дальше)**
 
