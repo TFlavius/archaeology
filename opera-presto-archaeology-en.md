@@ -452,6 +452,8 @@ The practical compromise I settled on: **use the capabilities of the language, d
 Opera had more dead, experimental, and just plain crazy features than you could shake a stick at. They clearly loved experimenting in Oslo—start counting:
 
 - The M2 mail client;
+- An IRC client;
+- An RSS reader;
 - An internal BitTorrent client;
 - Opera Unite—a kind of attempt to create a decentralized web;
 - Opera Mini—pages were dynamically executed on the server, and clients received a "pre-chewed" result;
