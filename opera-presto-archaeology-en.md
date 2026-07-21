@@ -444,6 +444,9 @@ It wasn't entirely without hiccups, though. Visiting a site with a self-signed c
 
 And then came the best part. Once the protocol migrated to OpenSSL 3, **the entire frozen copy of OpenSSL 1.0.0g was no longer needed**. The commit deleting it was **2,119 files and nearly 470,000 deleted lines of code**. Out of libopeay, 127 files remained: headers and Opera's addon extensions—but even those weren't thrown away; they were **ported to OpenSSL 3**: asynchronous key generation is now `asynch_rsa_gen_ossl3.cpp` sitting on top of the EVP API, and EV data and purposes moved to the new X.509. The stuff Opera bolted on top of someone else's library was carefully preserved.<br />
 As a final touch, a build switch was added, and now OpenSSL can be compiled statically or loaded from system libraries.
+<p style="text-align: center;">
+  <img src="img/tls1.3.png" alt="TLS 1.3 and new certs logic are working" />
+</p>
 
 ### V.II Updating Third-Party Code
 
