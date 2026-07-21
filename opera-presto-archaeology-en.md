@@ -420,7 +420,7 @@ Building in VS 2026 required more fixes, both in the language (declarations that
 
 And that was enough. The builds compiled and ran, the tests executed and passed—except for a few that were apparently tied to internal mock servers. Almost boringly so.
 
-It actually builds incredibly fast, by the way—two to three minutes on a Ryzen 9 5900HX; the bottleneck is likely memory.
+It actually builds fast: on an Intel Core Ultra 9 275HX, a full single-threaded build takes just 162 seconds, hitting a wall at ~103 seconds when heavily parallelized (up to 24 threads). This modest 1.5x scaling perfectly illustrates the nature of jumbo builds, where the bottleneck shifts from CPU cores to memory bandwidth.
 
 Did I find bugs? Of course. Let me tell you about the most interesting one: the Windows x64 build crashed on every single page, while the Linux x64 browser worked flawlessly. Digging in led to the JIT: **the trampoline transitioning from bytecode to native code didn't account for the Win64 calling convention**—which uses different registers for argument passing and requires a mandatory 32-byte shadow space that the Unix convention knows nothing about. Add to that a scattering of classic 64-bit porting blunders: `long` where a pointer is needed, truncating `HANDLE` to `int`, and a special gem—modern MSVC *optimized away to nothing* the table of JIT instruction handlers because, technically, nobody was "referencing" it.
 
