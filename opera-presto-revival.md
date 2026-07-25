@@ -69,7 +69,7 @@ lang: ru
 
 И вот только после этого появилась возможность что-то добавить в сам движок. Вот что удалось сделать за неделю:
 
-**DOM и JS API.**<
+**DOM и JS API.**
 - `MutationObserver` с полной моделью записей и доставкой через микротаски. 
 - `requestAnimationFrame`/`cancelAnimationFrame`.
 - `requestIdleCallback`/`cancelIdleCallback` с гарантией таймаута.
