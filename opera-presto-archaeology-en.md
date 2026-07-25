@@ -6,7 +6,7 @@ permalink: /
 lang: en
 ---
 
-<nav id="top" aria-label="Language navigation">
+<nav id="top" aria-label="Top navigation">
   <strong>English</strong> · <a href="{{ '/ru/' | relative_url }}" lang="ru">Русский</a>
 </nav>
 
@@ -14,7 +14,7 @@ lang: en
 
 ## Contents
 
-- **[I. The Pre-Monopoly Era: What Opera Was and Why It’s Gone](#i-the-pre-monopoly-era-what-opera-was-and-why-its-gone)**
+- **[I. The Pre-Monopoly Era: What Opera Was and Why It's Gone](#i-the-pre-monopoly-era-what-opera-was-and-why-its-gone)**
 - **[II. Digital Archaeology of Three Million Lines of Code](#ii-digital-archaeology-of-three-million-lines-of-code)**
   - [II.I How was Opera Built?](#iii-how-was-opera-built)
   - [II.II How was Opera Written?](#iiii-how-was-opera-written)
@@ -33,17 +33,15 @@ lang: en
 
 ---
 
-# The Engine We Lost: Digital Archaeology of Opera Presto
-
 > Disclaimer: Almost everything described below is legally questionable. I am not going to discuss this paradox; I think you understand why. But it explains why there is so little public information about the internal structure of Opera Presto (although I am aware of a few deep dives made in closed communities).<br />
 Another explanation is the sheer volume of work required on an undocumented codebase. Browser engines are genuine rocket science, and the Presto code is something else entirely. Figuring out layers of code in three different languages is almost beyond the power of a single human. AI agents, on the other hand, do this task perfectly; I used Fable/Opus and am very happy with the results.<br />
 And now, to the matter at hand...
 
-## I. The Pre-Monopoly Era: What Opera Was and Why It’s Gone
+## I. The Pre-Monopoly Era: What Opera Was and Why It's Gone
 
 Once upon a time, the web was a different place. Not better, not worse—though there are those who would argue with me. But it was definitely freer, and there was more choice. Including the choice of which browser to use.
 
-Much has been written about the first browser war and how IE destroyed Netscape. But the second browser war is somehow forgotten, even though its outcome is the reason we are now left with the all-devouring Chrome and its clones, Apple’s Safari, and a Firefox that is diligently burying itself with a measly three percent of the market. Everything else is basically a rounding error.
+Much has been written about the first browser war and how IE destroyed Netscape. But the second browser war is somehow forgotten, even though its outcome is the reason we are now left with the all-devouring Chrome and its clones, Apple's Safari, and a Firefox that is diligently burying itself with a measly three percent of the market. Everything else is basically a rounding error.
 
 In 2012, we still had IE (who could have guessed that Microsoft would give up developing it and switch to a competitor's engine!) and Opera. An absolutely independent, unique, and genuinely beloved browser developed by the Norwegian company Opera Software ASA.
 
@@ -55,7 +53,7 @@ And it was a fast, economical browser. The web had already started to get heavy 
 
 It seems surprising that with all these advantages, Opera didn't conquer the world. In a right, just world, Opera and Firefox could very well hold significant market shares right now, competing with Chrome and IE, making the web better, freer, and more convenient. In the doomed world we have created, Opera couldn't withstand the competition. The company decided to stop fighting, switched to WebKit (and later to its fork, Blink), and sold its intellectual property. The name "Opera" remains, but now it's just another Chinese Chromium reskin—a decent one, they say. Former Opera employees are developing their own browser, Vivaldi—also a Chromium reskin, and also supposedly good.
 
-But the Opera Presto source code, despite the pleas of the community, remained closed. I’ll talk about why later.
+But the Opera Presto source code, despite the pleas of the community, remained closed. I'll talk about why later.
 
 In November 2016, Opera Software ASA ceased to exist as a single entity, and in January 2017, someone "leaked" the ~2012 source code into the public domain. We don't know who did it, but thank you.
 
@@ -128,13 +126,15 @@ But that's not all. Presto is configured **entirely at compile time**. No runtim
 Each feature in the registry is a little questionnaire: description, owner, what it defines, what it depends on, and an "on/off" matrix across all five profiles. Reading `features.txt` is like flipping through a ship's log: here is `FEATURE_OUT_OF_MEMORY_POLLING` — "enable if you have a lot of memory, but it's still limited"; here is `FEATURE_LIMITED_FOOTPRINT` — "reduces code size at the cost of slower algorithms."
 
 2. **Tweaks** — constants (`TWEAK_*`), of which there are about **1,200** across the tree. Each tweak can have a different value for different profiles:
-```
-TWEAK_HC_FREE_MESSAGE_POOL_INITIAL_SIZE   jl
-    Value                   : 64
-    Value for desktop       : 512
-    Value for minimal       : 16
-```
-This is essentially performance tuning baked into the binary at build time.
+
+   ```
+   TWEAK_HC_FREE_MESSAGE_POOL_INITIAL_SIZE   jl
+       Value                   : 64
+       Value for desktop       : 512
+       Value for minimal       : 16
+   ```
+
+   This is essentially performance tuning baked into the binary at build time.
 
 3. **Capabilities** — macros like `*_CAP_*` (about **1,800** of them) that solve the problem of compatibility between module versions. Instead of "if module version ≥ X," you write "if `DPI_CAP_PLATFORM_EXECUTE` is defined." A module declares what it can do, and the consumer checks it via the preprocessor.
 
@@ -181,7 +181,7 @@ But this isn't the only length Opera went to for the sake of universality. This 
 
 > A typical example of something that was outside the envelope of change is the out-of-memory handling introduced in Opera 6 — it affected virtually every line of core code and was quite costly to implement.
 
-"Affected virtually every line of core code." That’s not a figure of speech: there are about 9,700 places in the tree using `LEAVE`/`TRAP`, and almost every function returns an `OP_STATUS` that cannot be silently ignored.
+"Affected virtually every line of core code." That's not a figure of speech: there are about 9,700 places in the tree using `LEAVE`/`TRAP`, and almost every function returns an `OP_STATUS` that cannot be silently ignored.
 
 The mechanism itself lives in `modules/util/excepts.h` (the architect is listed as Petter Reinholdtsen), and its origin can be read in the names: the `LEAVE` macro internally calls `User::Leave(i)`—which is verbatim the EPOC OS API. The Norwegians modeled their error handling after a phone OS: `TRAP` is `op_setjmp` on top of a chain of `CleanupItem`s, and classes like `ANCHOR` register objects for automatic cleanup when "jumping out." Essentially, they are manually implemented exceptions, without compiler support, but guaranteed to work on any 1999 toolchain.
 
@@ -306,7 +306,7 @@ This is a relative argument—there is documentation, albeit incomplete and some
 No direct lie here either. On the other hand, dumping "unprepared" source code wouldn't exactly have caused financial ruin, either.
 3. **Licensing restrictions** (the Presto core was heavily tied to closed, proprietary third-party libraries that would need to be painstakingly excised).<br />
 This was the strongest argument: the repository mentions **45 third-party components** under a tangled web of incompatible conditions. Some just require attribution (OpenSSL, Unicode data, Xiph codecs). Some are copyleft, which "infects" distribution (a variant of GPLv2 for FreeType, a triple GPL/LGPL/MPL license for Hunspell, LGPL for GStreamer). And some were **commercial, proprietary foreign code that Opera had absolutely no legal right to publish**: the Monotype iType font engine (`FEATURE_3P_ITYPE_ENGINE`) and the Matrix SSL library (`FEATURE_3P_MATRIX_SSL`). On top of that lay non-distributable data: a root certificate store with trusted anchors, search engine data, and ~197 MB of translation databases tied to Opera's internal infrastructure.<br /><br />
-But this argument loses its teeth once we look at the leaked code. It only contains the desktop versions for Windows, Linux, and macOS.<br/>
+But this argument loses its teeth once we look at the leaked code. It only contains the desktop versions for Windows, Linux, and macOS.<br />
 **Monotype iType** was used on devices lacking FreeType and system fonts. **Matrix SSL** was a compact commercial TLS for embedded devices. That's it; the rest of the components are under free licenses. The only definitively non-distributable things left were the root certificates, which are trivially easy to strip out, just like the other non-public data. This absolutely does not look like something requiring months of work from lawyers and engineers.
 
 **Opera ASA could have open-sourced the desktop versions of the browser at any moment, but they chose not to.**
@@ -402,7 +402,7 @@ And finally, a word on how Opera survived financially: affiliate links. They are
 
 This revenue stream had to be protected—not from the user, but from some rogue extension that might hijack the links. To do this, they built a mechanism called **Search Protection**: a system that *defended these settings against modification*. Search engine files were RSA-signed, the chosen default search engine was guarded by a checksum, and in the event of a mismatch, the browser silently rolled back the search setting to the signed copy.
 
-There's plenty more fascinating and crazy stuff in the code that I want to talk about. There’s enough material for three more chapters like this, but I restrained myself.
+There's plenty more fascinating and crazy stuff in the code that I want to talk about. There's enough material for three more chapters like this, but I restrained myself.
 
 ## V. Defrosting and Health Check
 
@@ -444,8 +444,9 @@ It wasn't entirely without hiccups, though. Visiting a site with a self-signed c
 
 And then came the best part. Once the protocol migrated to OpenSSL 3, **the entire frozen copy of OpenSSL 1.0.0g was no longer needed**. The commit deleting it was **2,119 files and nearly 470,000 deleted lines of code**. Out of libopeay, 127 files remained: headers and Opera's addon extensions—but even those weren't thrown away; they were **ported to OpenSSL 3**: asynchronous key generation is now `asynch_rsa_gen_ossl3.cpp` sitting on top of the EVP API, and EV data and purposes moved to the new X.509. The stuff Opera bolted on top of someone else's library was carefully preserved.<br />
 As a final touch, a build switch was added, and now OpenSSL can be compiled statically or loaded from system libraries.
+
 <p style="text-align: center;">
-  <img src="img/tls1.3.png" alt="TLS 1.3 and new certs logic are working" />
+  <img src="{{ '/img/tls1.3.png' | relative_url }}" alt="TLS 1.3 and new certs logic are working" />
 </p>
 
 ### V.II Updating Third-Party Code
@@ -508,14 +509,14 @@ Except for the macOS code. That was a port to Mac OS X (Cocoa with remnants of C
 
 ## VI. What's Next?
 
-Current status: Presto builds on Debian 13/GCC 14 and Visual Studio 2026, runs on Linux x64, Windows x86, and Windows x64, opens modern HTTPS sites via OpenSSL 3 with TLS 1.3, has survived eight dependency updates, and keeps thousands of its own tests green. For a project that started with "will this thing even compile," that’s not bad.<br />
+Current status: Presto builds on Debian 13/GCC 14 and Visual Studio 2026, runs on Linux x64, Windows x86, and Windows x64, opens modern HTTPS sites via OpenSSL 3 with TLS 1.3, has survived eight dependency updates, and keeps thousands of its own tests green. For a project that started with "will this thing even compile," that's not bad.<br />
 But we're absolutely not talking about using it for the modern web—at best, we'll see broken layouts and non-functional content on websites. A significant portion of resources won't render at all. Presto is frozen at a 2013 level—ES5.1 with no `Promise`s or arrow functions, CSS with no `grid` or `custom properties`, and HTTP without version 2.
 
 I don't want to jump the gun on whether an old Opera can be taught new tricks. We'll wait and see.
 
 I cannot publish the compiled binaries or the source code (except maybe as patches, though I doubt anyone would want to bother with those). However, I'm open to suggestions and currently thinking about what can be done to actually release the project.
 
-Also, there will be no links here to a Telegram channel, a Patreon, or anything else. That’s not the point.
+Also, there will be no links here to a Telegram channel, a Patreon, or anything else. That's not the point.
 
 The point is that Opera was a browser built with love and understanding. You can see it in every line of code, from the "we don't need the STL" manifesto to the double rainbow in the CSS grammar. The refusal to publish the source code felt like an injustice back then—and judging by the fact that someone eventually leaked it anyway, the people inside the company felt the same way. Surely some of those people wished a deep dive like this would happen.
 
@@ -523,6 +524,6 @@ Well, now it has.
 
 ---
 
-<nav aria-label="Article navigation">
-  <a href="#top">↑ Back to top</a> · <strong>English</strong> · <a href="{{ '/ru/' | relative_url }}" lang="ru">Русский</a>
+<nav aria-label="Bottom navigation">
+  <a href="#top">↑ Back to top</a> · <a href="{{ '/revival/' | relative_url }}" rel="next">Next: The Engine We're Bringing Back to Life →</a> · <strong>English</strong> · <a href="{{ '/ru/' | relative_url }}" lang="ru">Русский</a>
 </nav>
