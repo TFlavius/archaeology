@@ -307,6 +307,7 @@ In the illustration folder for the inverted index slide lies a file named `bush.
 
 ## XII. The Beautiful Opera of the Future
 
+What's next?<br />
 The main barrier is **ES2015**. When a page includes a script, and the very first line contains an arrow function, `class`, or `let`—the parser crashes with a syntax error, and the entire script just isn't executed at all. Not "works poorly," but doesn't work. This can't be fixed with polyfills; I'll have to touch Carakan itself—its parser, bytecode, and most likely, the JIT.
 
 Next on the list: CSS Grid, custom properties, Shadow DOM, HTTP/2... A multi-process framework that exists in Presto but was never finished.
