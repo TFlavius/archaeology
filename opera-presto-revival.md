@@ -69,13 +69,27 @@ lang: ru
 
 И вот только после этого появилась возможность что-то добавить в сам движок. Вот что удалось сделать за неделю:
 
-**DOM и JS API.** `MutationObserver` с полной моделью записей и доставкой через микротаски. `requestAnimationFrame`/`cancelAnimationFrame`. `requestIdleCallback`/`cancelIdleCallback` с гарантией таймаута. Интерфейс `URL` — `new URL(href, base)` с изменяемыми компонентами, плюс `createObjectURL`/`revokeObjectURL` для Blob. Encoding API: `TextEncoder`/`TextDecoder` с потоковым декодированием и полной таблицей меток кодировок. `navigator.sendBeacon`.
+**DOM и JS API.**<
+- `MutationObserver` с полной моделью записей и доставкой через микротаски. 
+- `requestAnimationFrame`/`cancelAnimationFrame`.
+- `requestIdleCallback`/`cancelIdleCallback` с гарантией таймаута.
+- Интерфейс `URL` — `new URL(href, base)` с изменяемыми компонентами, плюс `createObjectURL`/`revokeObjectURL` для Blob.
+- Encoding API: `TextEncoder`/`TextDecoder` с потоковым декодированием и полной таблицей меток кодировок. 
+- `navigator.sendBeacon`.
 
-**HTML.** Адаптивные картинки целиком: `srcset` с плотностями, `w`-дескрипторы с `sizes`, `<picture>`/`<source>`. И `<iframe srcdoc>`.
+**HTML.**
+- Адаптивные картинки целиком: `srcset` с плотностями, `w`-дескрипторы с `sizes`, `<picture>`/`<source>`.
+- `<iframe srcdoc>`.
 
-**CSS.** Флексбокс-отступы `gap`/`row-gap`/`column-gap`. Логические свойства: `inline-size`, `block-size`, их `min-`/`max-`-формы, `margin-block-*`/`margin-inline-*`.
+**CSS.**
+- Флексбокс-отступы `gap`/`row-gap`/`column-gap`.
+- Логические свойства: `inline-size`, `block-size`, их `min-`/`max-`-формы, `margin-block-*`/`margin-inline-*`.
 
-**Canvas и SVG.** `Path2D` во всех трёх формах конструктора. `ellipse()`. Пунктир: `setLineDafsh`/`getLineDash`/`lineDashOffset`. Режимы наложения через `globalCompositeOperation` поверх VEGA. В SVG вычисленный стиль перестал переписывать современные ключевые слова `writing-mode` в легаси-значения SVG 1.1.
+**Canvas и SVG.**
+- `Path2D` во всех трёх формах конструктора. `ellipse()`.
+- Пунктир: `setLineDafsh`/`getLineDash`/`lineDashOffset`.
+- Режимы наложения через `globalCompositeOperation` поверх VEGA.
+- В SVG вычисленный стиль перестал переписывать современные ключевые слова `writing-mode` в легаси-значения SVG 1.1.
 
 Теперь в html5test уже **354 из 555**, CSS Flexbox — **604 из 997**.
 

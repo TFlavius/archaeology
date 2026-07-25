@@ -70,13 +70,27 @@ In practice, you need to track not just the number of failing tests, but *which*
 
 And only after that did it become possible to actually add things to the engine itself. Here's what was accomplished in a week:
 
-**DOM and JS API.** `MutationObserver` with a full record model and microtask delivery. `requestAnimationFrame`/`cancelAnimationFrame`. `requestIdleCallback`/`cancelIdleCallback` with timeout guarantees. The `URL` interface—`new URL(href, base)` with mutable components, plus `createObjectURL`/`revokeObjectURL` for Blobs. Encoding API: `TextEncoder`/`TextDecoder` with streaming decoding and a full encoding label table. `navigator.sendBeacon`.
+**DOM and JS API.**
+- `MutationObserver` with a full record model and microtask delivery. 
+- `requestAnimationFrame`/`cancelAnimationFrame`.
+- `requestIdleCallback`/`cancelIdleCallback` with timeout guarantees.
+- The `URL` interface—`new URL(href, base)` with mutable components, plus `createObjectURL`/`revokeObjectURL` for Blobs.
+- Encoding API: `TextEncoder`/`TextDecoder` with streaming decoding and a full encoding label table. 
+- `navigator.sendBeacon`.
 
-**HTML.** Fully responsive images: `srcset` with densities, `w`-descriptors with `sizes`, `<picture>`/`<source>`. And `<iframe srcdoc>`.
+**HTML.** 
+- Fully responsive images: `srcset` with densities, `w`-descriptors with `sizes`, `<picture>`/`<source>`. 
+- `<iframe srcdoc>`.
 
-**CSS.** Flexbox gaps: `gap`/`row-gap`/`column-gap`. Logical properties: `inline-size`, `block-size`, their `min-`/`max-` forms, `margin-block-*`/`margin-inline-*`.
+**CSS.**
+- Flexbox gaps: `gap`/`row-gap`/`column-gap`.
+- Logical properties: `inline-size`, `block-size`, their `min-`/`max-` forms, `margin-block-*`/`margin-inline-*`.
 
-**Canvas and SVG.** `Path2D` in all three constructor forms. `ellipse()`. Dashed lines: `setLineDash`/`getLineDash`/`lineDashOffset`. Blend modes via `globalCompositeOperation` on top of VEGA. In SVG, the computed style stopped rewriting modern `writing-mode` keywords into legacy SVG 1.1 values.
+**Canvas and SVG.**
+- `Path2D` in all three constructor forms. `ellipse()`.
+- Dashed lines: `setLineDash`/`getLineDash`/`lineDashOffset`.
+- Blend modes via `globalCompositeOperation` on top of VEGA.
+- In SVG, the computed style stopped rewriting modern `writing-mode` keywords into legacy SVG 1.1 values.
 
 Now we have **354 out of 555** in html5test, and CSS Flexbox is at **604 out of 997**.
 
