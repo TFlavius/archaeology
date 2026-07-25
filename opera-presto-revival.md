@@ -259,8 +259,6 @@ g_opera->libssl_module.InterModuleShutdown();
 
 Инженер вставил вызов не там, где считал правильным, и оставил в коде указание, кто именно так решил.
 
----
-
 Обсуждение модели безопасности в `modules/security_manager/documentation/pending-models.txt` — это переписка, скопированная в папку документации как есть:
 
 ```text

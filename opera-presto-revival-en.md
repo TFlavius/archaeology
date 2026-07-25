@@ -260,8 +260,6 @@ g_opera->libssl_module.InterModuleShutdown();
 
 The engineer inserted the call not where they thought was right, but left a note in the code specifying exactly *who* made that decision.
 
----
-
 A discussion about the security model in `modules/security_manager/documentation/pending-models.txt` is basically an email chain copied into the documentation folder as-is:
 
 ```text
