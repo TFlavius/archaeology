@@ -34,7 +34,7 @@ lang: en
 ---
 
 > Disclaimer: Almost everything described below is legally questionable. I am not going to discuss this paradox; I think you understand why. But it explains why there is so little public information about the internal structure of Opera Presto (although I am aware of a few deep dives made in closed communities).<br />
-Another explanation is the sheer volume of work required on an undocumented codebase. Browser engines are genuine rocket science, and the Presto code is something else entirely. Figuring out layers of code in three different languages is almost beyond the power of a single human. AI agents, on the other hand, do this task perfectly; I used Fable/Opus and am very happy with the results.<br />
+Another explanation is the sheer volume of work required on an undocumented codebase. Browser engines are genuine rocket science, and the Presto code is something special. Figuring out layers of code in three different languages is almost beyond the power of a single human. AI agents, on the other hand, do this task perfectly; I used Fable/Opus and am very happy with the results.<br />
 And now, to the matter at hand...
 
 ## I. The Pre-Monopoly Era: What Opera Was and Why It's Gone
