@@ -71,15 +71,15 @@ In practice, you need to track not just the number of failing tests, but *which*
 And only after that did it become possible to actually add things to the engine itself. Here's what was accomplished in a week:
 
 **DOM and JS API.**
-- `MutationObserver` with a full record model and microtask delivery. 
+- `MutationObserver` with a full record model and microtask delivery.
 - `requestAnimationFrame`/`cancelAnimationFrame`.
 - `requestIdleCallback`/`cancelIdleCallback` with timeout guarantees.
 - The `URL` interface—`new URL(href, base)` with mutable components, plus `createObjectURL`/`revokeObjectURL` for Blobs.
-- Encoding API: `TextEncoder`/`TextDecoder` with streaming decoding and a full encoding label table. 
+- Encoding API: `TextEncoder`/`TextDecoder` with streaming decoding and a full encoding label table.
 - `navigator.sendBeacon`.
 
-**HTML.** 
-- Fully responsive images: `srcset` with densities, `w`-descriptors with `sizes`, `<picture>`/`<source>`. 
+**HTML.**
+- Fully responsive images: `srcset` with densities, `w`-descriptors with `sizes`, `<picture>`/`<source>`.
 - `<iframe srcdoc>`.
 
 **CSS.**
@@ -323,5 +323,5 @@ Now I know you can.
 ---
 
 <nav aria-label="Bottom navigation">
-  <a href="#top">↑ Back to top</a> · <strong>English</strong> · <a href="{{ '/ru/revival/' | relative_url }}" lang="ru">Русский</a>
+  <a href="#top">↑ Back to top</a> · <a href="{{ '/modern/' | relative_url }}" rel="next">Next: The Engine That Learns →</a> · <strong>English</strong> · <a href="{{ '/ru/revival/' | relative_url }}" lang="ru">Русский</a>
 </nav>

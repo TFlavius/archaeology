@@ -70,11 +70,11 @@ lang: ru
 И вот только после этого появилась возможность что-то добавить в сам движок. Вот что удалось сделать за неделю:
 
 **DOM и JS API.**
-- `MutationObserver` с полной моделью записей и доставкой через микротаски. 
+- `MutationObserver` с полной моделью записей и доставкой через микротаски.
 - `requestAnimationFrame`/`cancelAnimationFrame`.
 - `requestIdleCallback`/`cancelIdleCallback` с гарантией таймаута.
 - Интерфейс `URL` — `new URL(href, base)` с изменяемыми компонентами, плюс `createObjectURL`/`revokeObjectURL` для Blob.
-- Encoding API: `TextEncoder`/`TextDecoder` с потоковым декодированием и полной таблицей меток кодировок. 
+- Encoding API: `TextEncoder`/`TextDecoder` с потоковым декодированием и полной таблицей меток кодировок.
 - `navigator.sendBeacon`.
 
 **HTML.**
@@ -323,5 +323,5 @@ g_opera->libssl_module.InterModuleShutdown();
 ---
 
 <nav aria-label="Нижняя навигация">
-  <a href="#top">↑ Наверх</a> · <a href="{{ '/revival/' | relative_url }}" lang="en">English</a> · <strong>Русский</strong>
+  <a href="#top">↑ Наверх</a> · <a href="{{ '/ru/modern/' | relative_url }}" rel="next">Дальше: Движок, который чему-то учится →</a> · <a href="{{ '/revival/' | relative_url }}" lang="en">English</a> · <strong>Русский</strong>
 </nav>
