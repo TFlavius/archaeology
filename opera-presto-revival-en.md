@@ -62,7 +62,7 @@ The good news: for 2012, this was a browser that was in some ways even ahead of 
 Now, tens of thousands of external checks have been added to the engine's internal tests. And this creates two problems.<br />
 **First**: every full run takes half an hour or more, and that's just for one configuration.<br />
 **Second**: the "all tests green" acceptance criteria is useless because we now have "red" tests. There's a temptation to just say screw it and disable acceptance testing with a "well, that's normal, we'll fix it later and turn it back on."<br />
-The first problem just has to be accepted as a given, running the full test scope only where it's explicitly required.
+The first problem just has to be accepted as a given, running the full test scope only where it's explicitly required.<br />
 For the second, there is a pattern designed to combat it. It's called ["the ratchet"](https://qntm.org/ratchet), and its premise is to lock in the number of failures, ensuring that they decrease but never increase. As soon as there are fewer "red" tests, this new baseline must be explicitly locked in. A ratchet only turns one way; you can only loosen it intentionally.<br />
 In practice, you need to track not just the number of failing tests, but *which* tests are failing, and also link the test states to commits. The pattern requires general accuracy and attention to detail. It doesn't check if the baseline is correct—only that it hasn't dropped.
 
