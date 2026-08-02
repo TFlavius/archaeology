@@ -97,6 +97,10 @@ There was also Netscape Navigator — or "Nutscape," as some called it. It's tre
 
 But one day, on one of these discs, you stumble upon something new and interesting. Opera 4, 1.8 megabytes, and it works with some incredible responsiveness and convenience. I remember reading Harry Potter fan translations in IE, and it was barely tolerable. Scrolling the page took seconds, and the "donkey" simply didn't know how to zoom text properly. Opera did it instantly.
 
+<p style="text-align: center;">
+  <img src="{{ '/img/opera40.png' | relative_url }}" alt="1.8 mb of pure awesomeness" />
+</p>
+
 Opera was a paid product; some versions had a limited trial period, others displayed an unremovable banner. If you, like me, lived in Russia in the 90s/00s, you had neither the money nor the means to buy software — and the need to find a "crack" bothered absolutely no one.<br />
 Perhaps this is one of the reasons why Opera became so deeply rooted in the post-Soviet space. I can assume that in a different environment, I would have pondered the choice between a free but clunky product and a paid alternative. In a situation where all your software was pirated by default, the dilemma didn't exist.
 
