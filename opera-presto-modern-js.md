@@ -205,5 +205,5 @@ UNTRUSTED_BASE_ENTRY_RANGE(DIGINOTAR_2007, NULL, "Untrusted due to being hacked 
 Но кто запретит пытаться?
 
 <nav aria-label="Нижняя навигация">
-  <a href="#top">↑ Наверх</a> · <a href="{{ '/modern/' | relative_url }}" lang="en">English</a> · <strong>Русский</strong>
+  <a href="#top">↑ Наверх</a> · <a href="{{ '/ru/css/' | relative_url }}" rel="next">Дальше: Движок, которому нужен CSS →</a> · <a href="{{ '/modern/' | relative_url }}" lang="en">English</a> · <strong>Русский</strong>
 </nav>

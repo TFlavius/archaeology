@@ -55,6 +55,12 @@
 * **[XVII. Патчи для всего интернета и другие безумные находки](opera-presto-modern-js.md#xvii-патчи-для-всего-интернета-и-другие-безумные-находки)**
 * **[XVIII. Что дальше](opera-presto-modern-js.md#xviii-что-дальше)**
 
+### Часть 4. Движок, которому нужен CSS
+
+[Читать здесь](opera-presto-modern-css.md) · [читать на сайте](https://tflavius.github.io/archaeology/ru/css/)
+
+* **[XIX. Как завести CSS?](opera-presto-modern-css.md#xix-как-завести-css)**
+
 ---
 
 ## Table of Contents [EN]
