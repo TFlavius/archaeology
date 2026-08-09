@@ -60,6 +60,8 @@
 [Читать здесь](opera-presto-modern-css.md) · [читать на сайте](https://tflavius.github.io/archaeology/ru/css/)
 
 * **[XIX. Как завести CSS?](opera-presto-modern-css.md#xix-как-завести-css)**
+* **[XX. Эффект домино](opera-presto-modern-css.md#xx-эффект-домино)**
+* **[XXI. Что дальше?](opera-presto-modern-css.md#xxi-что-дальше)**
 
 ---
 
@@ -110,3 +112,11 @@
 * **[XVI. How (and Why) to Properly Pretend](opera-presto-modern-js-en.md#xvi-how-and-why-to-properly-pretend)**
 * **[XVII. Patches for the Entire Internet and Other Insane Discoveries](opera-presto-modern-js-en.md#xvii-patches-for-the-entire-internet-and-other-insane-discoveries)**
 * **[XVIII. What's Next](opera-presto-modern-js-en.md#xviii-whats-next)**
+
+### Part 4. The Engine That Needs CSS
+
+[Read here](opera-presto-modern-css-en.md) · [read online](https://tflavius.github.io/archaeology/css/)
+
+* **[XIX. How Do You Get CSS Running?](opera-presto-modern-css-en.md#xix-how-do-you-get-css-running)**
+* **[XX. The Domino Effect](opera-presto-modern-css-en.md#xx-the-domino-effect)**
+* **[XXI. What's Next?](opera-presto-modern-css-en.md#xxi-whats-next)**

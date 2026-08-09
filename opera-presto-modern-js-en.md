@@ -205,5 +205,5 @@ August 30, 2026, will arrive exactly a month from the time I'm writing this. I w
 But who can stop me from trying?
 
 <nav aria-label="Bottom navigation">
-  <a href="#top">↑ Back to top</a> · <strong>English</strong> · <a href="{{ '/ru/modern/' | relative_url }}" lang="ru">Русский</a>
+  <a href="#top">↑ Back to top</a> · <a href="{{ '/css/' | relative_url }}" rel="next">Next: The Engine That Needs CSS →</a> · <strong>English</strong> · <a href="{{ '/ru/modern/' | relative_url }}" lang="ru">Русский</a>
 </nav>
