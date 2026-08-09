@@ -409,7 +409,7 @@ There's plenty more fascinating and crazy stuff in the code that I want to talk 
 Building the code on Linux turned out to be surprisingly easy despite the outdated toolchain. In fact, the only exotic requirements are Python 2.7 for Flower and Pike for the tests (not counting Perl; any current version in any current distro works fine), which is easiest to just shove into a Docker image once and be done with it. I managed to build the engine itself on a modern GCC 14 after one minor fix and a dozen compiler flags:
 
 ```
--fpermissive, -Wno-narrowing, -Wno-deprecated, -Wno-register, -Wno-class-memaccess, 
+-fpermissive, -Wno-narrowing, -Wno-deprecated, -Wno-register, -Wno-class-memaccess,
 -Wno-deprecated-declarations, -Wno-misleading-indentation, -Wno-address,
 -Wno-stringop-overflow, -Wno-stringop-truncation, -Wno-array-bounds, -Wno-restrict,
 -Wno-format-overflow, -Wno-format-truncation, -Wno-nonnull, -Wno-dangling-pointer,

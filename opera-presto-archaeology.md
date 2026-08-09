@@ -409,7 +409,7 @@ Feature ExtendedShortcuts, 1 = Switch to previous page
 Собрать код в Linux оказалось неожиданно просто, несмотря на устаревший тулчейн. Фактически, из экзотики требуются только Python 2.7 для Flower и Pike для тестов (Perl не считаем, любая актуальная версия в любом актуальном дистрибутиве работает), что проще всего один раз засунуть в Docker-образ. Сам движок удалось собрать на актуальном GCC 14 после одной незначительной правки и десятка флагов компилятора:
 
 ```
--fpermissive, -Wno-narrowing, -Wno-deprecated, -Wno-register, -Wno-class-memaccess, 
+-fpermissive, -Wno-narrowing, -Wno-deprecated, -Wno-register, -Wno-class-memaccess,
 -Wno-deprecated-declarations, -Wno-misleading-indentation, -Wno-address,
 -Wno-stringop-overflow, -Wno-stringop-truncation, -Wno-array-bounds, -Wno-restrict,
 -Wno-format-overflow, -Wno-format-truncation, -Wno-nonnull, -Wno-dangling-pointer,
