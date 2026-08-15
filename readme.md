@@ -63,6 +63,30 @@
 * **[XX. Эффект домино](opera-presto-modern-css.md#xx-эффект-домино)**
 * **[XXI. Что дальше?](opera-presto-modern-css.md#xxi-что-дальше)**
 
+### Часть 5. Движок, который обогнал Chrome: полный ES2015 и новый медиабэкенд
+
+[Читать здесь](opera-presto-es2015-gstreamer.md) · [читать на сайте](https://tflavius.github.io/archaeology/ru/es2015-gstreamer/)
+
+* **[XXII. Шаг назад, два шага вперёд](opera-presto-es2015-gstreamer.md#xxii-шаг-назад-два-шага-вперёд)**
+  * [XXII.I JS-машина из 2009 года](opera-presto-es2015-gstreamer.md#xxiii-js-машина-из-2009-года)
+  * [XXII.II ES6 — это вам не стрелочки](opera-presto-es2015-gstreamer.md#xxiiii-es6--это-вам-не-стрелочки)
+  * [XXII.III Объекты, которым нельзя доверять](opera-presto-es2015-gstreamer.md#xxiiiii-объекты-которым-нельзя-доверять)
+  * [XXII.IV Как убить вызывающую функцию и ничего не сломать](opera-presto-es2015-gstreamer.md#xxiiiv-как-убить-вызывающую-функцию-и-ничего-не-сломать)
+  * [XXII.V «Небольшая формальность»](opera-presto-es2015-gstreamer.md#xxiiv-небольшая-формальность)
+  * [XXII.VI Что теперь умеет Carakan?](opera-presto-es2015-gstreamer.md#xxiivi-что-теперь-умеет-carakan)
+* **[XXIII. Проигрыватель, который ничего не проигрывает](opera-presto-es2015-gstreamer.md#xxiii-проигрыватель-который-ничего-не-проигрывает)**
+  * [XXIII.I Немного раскопок вокруг GStreamer](opera-presto-es2015-gstreamer.md#xxiiii-немного-раскопок-вокруг-gstreamer)
+  * [XXIII.II Linux, Windows и одна маленькая DLL](opera-presto-es2015-gstreamer.md#xxiiiii-linux-windows-и-одна-маленькая-dll)
+  * [XXIII.III Смерть GStreamer 0.10](opera-presto-es2015-gstreamer.md#xxiiiiii-смерть-gstreamer-010)
+  * [XXIII.IV Почему снова GStreamer?](opera-presto-es2015-gstreamer.md#xxiiiiv-почему-снова-gstreamer)
+* **[XXIV. Замена проигрывателя на выигрыватель](opera-presto-es2015-gstreamer.md#xxiv-замена-проигрывателя-на-выигрыватель)**
+  * [XXIV.I Лёгкие восемьдесят восемь процентов](opera-presto-es2015-gstreamer.md#xxivi-лёгкие-восемьдесят-восемь-процентов)
+  * [XXIV.II Источник, который должен уметь возвращаться](opera-presto-es2015-gstreamer.md#xxivii-источник-который-должен-уметь-возвращаться)
+  * [XXIV.III Буфер, от которого нельзя наследоваться](opera-presto-es2015-gstreamer.md#xxiviii-буфер-от-которого-нельзя-наследоваться)
+  * [XXIV.IV Индекс, которого больше нет](opera-presto-es2015-gstreamer.md#xxiviv-индекс-которого-больше-нет)
+  * [XXIV.V Минус 260 тысяч строк](opera-presto-es2015-gstreamer.md#xxivv-минус-260-тысяч-строк)
+* **[XXV. Что дальше?](opera-presto-es2015-gstreamer.md#xxv-что-дальше)**
+
 ---
 
 ## Table of Contents [EN]
@@ -120,3 +144,27 @@
 * **[XIX. How Do You Get CSS Running?](opera-presto-modern-css-en.md#xix-how-do-you-get-css-running)**
 * **[XX. The Domino Effect](opera-presto-modern-css-en.md#xx-the-domino-effect)**
 * **[XXI. What's Next?](opera-presto-modern-css-en.md#xxi-whats-next)**
+
+### Part 5. The Engine That Outpaced Chrome: Full ES2015 and a New Media Backend
+
+[Read here](opera-presto-es2015-gstreamer-en.md) · [read online](https://tflavius.github.io/archaeology/es2015-gstreamer/)
+
+* **[XXII. One Step Back, Two Steps Forward](opera-presto-es2015-gstreamer-en.md#xxii-one-step-back-two-steps-forward)**
+  * [XXII.I A JS Machine from 2009](opera-presto-es2015-gstreamer-en.md#xxiii-a-js-machine-from-2009)
+  * [XXII.II ES6 is Not Just Arrow Functions](opera-presto-es2015-gstreamer-en.md#xxiiii-es6-is-not-just-arrow-functions)
+  * [XXII.III Objects You Cannot Trust](opera-presto-es2015-gstreamer-en.md#xxiiiii-objects-you-cannot-trust)
+  * [XXII.IV How to Kill a Calling Function Without Breaking Anything](opera-presto-es2015-gstreamer-en.md#xxiiiv-how-to-kill-a-calling-function-without-breaking-anything)
+  * [XXII.V "A Minor Formality"](opera-presto-es2015-gstreamer-en.md#xxiiv-a-minor-formality)
+  * [XXII.VI What Can Carakan Do Now?](opera-presto-es2015-gstreamer-en.md#xxiivi-what-can-carakan-do-now)
+* **[XXIII. The Player That Plays Nothing](opera-presto-es2015-gstreamer-en.md#xxiii-the-player-that-plays-nothing)**
+  * [XXIII.I A Bit of Digging Around GStreamer](opera-presto-es2015-gstreamer-en.md#xxiiii-a-bit-of-digging-around-gstreamer)
+  * [XXIII.II Linux, Windows, and One Little DLL](opera-presto-es2015-gstreamer-en.md#xxiiiii-linux-windows-and-one-little-dll)
+  * [XXIII.III The Death of GStreamer 0.10](opera-presto-es2015-gstreamer-en.md#xxiiiiii-the-death-of-gstreamer-010)
+  * [XXIII.IV Why GStreamer Again?](opera-presto-es2015-gstreamer-en.md#xxiiiiv-why-gstreamer-again)
+* **[XXIV. Time to Change the Record](opera-presto-es2015-gstreamer-en.md#xxiv-time-to-change-the-record)**
+  * [XXIV.I The Easy Eighty-Eight Percent](opera-presto-es2015-gstreamer-en.md#xxivi-the-easy-eighty-eight-percent)
+  * [XXIV.II A Source That Must Be Able to Return](opera-presto-es2015-gstreamer-en.md#xxivii-a-source-that-must-be-able-to-return)
+  * [XXIV.III A Buffer You Cannot Inherit From](opera-presto-es2015-gstreamer-en.md#xxiviii-a-buffer-you-cannot-inherit-from)
+  * [XXIV.IV The Index That Is No More](opera-presto-es2015-gstreamer-en.md#xxiviv-the-index-that-is-no-more)
+  * [XXIV.V Minus 260 Thousand Lines](opera-presto-es2015-gstreamer-en.md#xxivv-minus-260-thousand-lines)
+* **[XXV. What's Next?](opera-presto-es2015-gstreamer-en.md#xxv-whats-next)**

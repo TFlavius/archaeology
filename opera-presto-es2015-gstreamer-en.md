@@ -1,0 +1,366 @@
+---
+layout: default
+title: "The Engine That Outpaced Chrome: Full ES2015 and a New Media Backend"
+description: "Report on the fifth week of reviving the Opera Presto browser engine: full ES2015 compliance and porting to GStreamer 1.x."
+permalink: /es2015-gstreamer/
+lang: en
+---
+
+<nav id="top" aria-label="Top navigation">
+  <a href="{{ '/css/' | relative_url }}" rel="prev">← Previous: The Engine That Needs CSS</a> · <strong>English</strong> · <a href="{{ '/ru/es2015-gstreamer/' | relative_url }}" lang="ru">Русский</a>
+</nav>
+
+# The Engine That Outpaced Chrome: Full ES2015 and a New Media Backend
+
+## Table of Contents
+
+- **[XXII. One Step Back, Two Steps Forward](#xxii-one-step-back-two-steps-forward)**
+  - [XXII.I A JS Machine from 2009](#xxiii-a-js-machine-from-2009)
+  - [XXII.II ES6 is Not Just Arrow Functions](#xxiiii-es6-is-not-just-arrow-functions)
+  - [XXII.III Objects You Cannot Trust](#xxiiiii-objects-you-cannot-trust)
+  - [XXII.IV How to Kill a Calling Function Without Breaking Anything](#xxiiiv-how-to-kill-a-calling-function-without-breaking-anything)
+  - [XXII.V "A Minor Formality"](#xxiiv-a-minor-formality)
+  - [XXII.VI What Can Carakan Do Now?](#xxiivi-what-can-carakan-do-now)
+- **[XXIII. The Player That Plays Nothing](#xxiii-the-player-that-plays-nothing)**
+  - [XXIII.I A Bit of Digging Around GStreamer](#xxiiii-a-bit-of-digging-around-gstreamer)
+  - [XXIII.II Linux, Windows, and One Little DLL](#xxiiiii-linux-windows-and-one-little-dll)
+  - [XXIII.III The Death of GStreamer 0.10](#xxiiiiii-the-death-of-gstreamer-010)
+  - [XXIII.IV Why GStreamer Again?](#xxiiiiv-why-gstreamer-again)
+- **[XXIV. Time to Change the Record](#xxiv-time-to-change-the-record)**
+  - [XXIV.I The Easy Eighty-Eight Percent](#xxivi-the-easy-eighty-eight-percent)
+  - [XXIV.II A Source That Must Be Able to Return](#xxivii-a-source-that-must-be-able-to-return)
+  - [XXIV.III A Buffer You Cannot Inherit From](#xxiviii-a-buffer-you-cannot-inherit-from)
+  - [XXIV.IV The Index That Is No More](#xxiviv-the-index-that-is-no-more)
+  - [XXIV.V Minus 260 Thousand Lines](#xxivv-minus-260-thousand-lines)
+- **[XXV. What's Next?](#xxv-whats-next)**
+
+Last week it felt like there was nothing much to brag about, but today, without any false modesty, I present to you this:
+
+<p style="text-align: center;">
+  <img src="{{ '/img/es6.png' | relative_url }}" alt="Hammer on the left, sickle on the right" />
+</p>
+
+On the left is the current Opera build. On the right is the latest Chrome.<br />
+And that's not all.
+
+Take a seat. It's going to be a deep dive.
+
+## XXII. One Step Back, Two Steps Forward
+
+I already mentioned that Carakan got ES2015 support in a week. That was both true and a massive oversimplification.
+
+The engine did indeed learn to parse and execute arrow functions, classes, modules, generators, destructuring, and other constructs that previously shattered modern scripts on impact. `Symbol`, collections, and `Promise` were added, topped off with `async`/`await`, which was necessary for testing. The main practical barrier was lifted: Carakan stopped treating modern JavaScript as a syntax error.
+
+But between "understanding" and "full-fledged implementation" lie thousands of tiny rules: what order expressions are evaluated in, which global object the error prototype is pulled from, how many times a property can be read, what happens during an OOM (Out of Memory) event, and whether a recursive call must eventually overflow the stack. This, essentially, *is* the language.
+
+Therefore, after the initial blitz, I had to go back and do the whole job again—this time not following a checklist of features, but the specification as a whole. And this is where Carakan's story gets much more interesting.
+
+### XXII.I A JS Machine from 2009
+
+Carakan was designed at a very specific moment in history. Opera's previous engine was called Futhark and its primary focus was being compact: a reasonable priority for a browser that had to run on TVs, PDAs, and phones where memory was measured in mere megabytes. But towards the late 2000s, web pages started turning into applications, Google and Apple kicked off a JavaScript performance race, and saving a few megabytes at the cost of slow execution was no longer viable.
+
+In February 2009, Opera [announced a new engine](https://www.infoq.com/news/2009/02/caracan_safari4/) built around three concepts: register-based bytecode, machine code generation, and automatic object classification. In Opera 10.50, it officially replaced Futhark.
+
+The first idea is easiest to grasp with a small example. A stack-based virtual machine adds two variables something like this:
+
+```text
+push a to stack
+push b to stack
+add top two values
+pop result into c
+```
+
+A register-based one does this:
+
+```text
+add r1 and r2, write result to r3
+```
+
+Its instructions are longer, but it avoids constantly shuffling data to the top of the stack and back. It executes fewer commands, copies fewer values, and the intermediate representation looks much more like what an actual CPU works with.
+
+Carakan's compiler turns raw JavaScript into this bytecode, and from there, the exact same stream of instructions can either be executed by the interpreter or compiled into machine code. The internal documentation calls this bytecode **the API between the compiler and the JIT**. This is a solid boundary: the complex parser doesn't need to know what CPU Opera is running on, and the complex machine code generator doesn't need to re-parse JavaScript.
+
+Sitting on top of this shared base are native backends for x86, x86-64, ARM, and MIPS. They don't use LLVM or an external assembler—Carakan encodes the machine instructions itself, allocates registers itself, and builds the transitions between C++, the interpreter, and the generated code itself. Regular expressions are handled by a **separate compiler**, which has its own dedicated JIT for the same architectures.
+
+Even the standard library is separated from the machine in an unusual way: a significant chunk of built-in functions is written in ECMAScript itself and is compiled into the same bytecode during the build process. Hot operations tightly coupled with internals are implemented in C++, but for the rest, the language serves as its own library platform. This is another reason why extending the existing bytecode proved much more useful than building a second interpreter alongside it.
+
+The second half of the design is the object model. JavaScript allows you to add any property to an object at any time, delete it, replace a number with a string, or swap out the prototype. A naive implementation stores a heavy hash table next to every object, explaining exactly what is inside it right now. Carakan instead groups similar objects using internal classes: if a thousand objects received the same properties in the same order, the description of their "shape" is stored only once, and each object just holds a pointer to it.
+
+The "Compact Object Model" documentation explains this in detail: the old object shape required six, seven, or at minimum four pointers in various cases. The new one reduced everything to **just one**—a pointer to the class. The class itself knows the property names, their types, and physical memory offsets; the object simply stores the values directly in the allocated slots. On 32-bit platforms, values are additionally packed into eight bytes using NaN-boxing: specific bit patterns of the `NaN` float are used as tags for integers and pointers.
+
+Why was everything built exactly this way? Because Carakan simultaneously needed the speed of a desktop browser, the footprint of an embedded device, and portability across processors that lacked any shared modern infrastructure. It had to cope with running out of memory, compile without STL or exceptions, and run in the exact same single-threaded message loop as the network, DOM, and page layout. The transition from the footprint-oriented Futhark to the speed-oriented Carakan did not erase Opera's habit of counting every single pointer.
+
+This context is vital for the rest of the story. I wasn't updating an abstract JavaScript implementation, but a highly dense mechanism where object properties, bytecode, the garbage collector, and four machine code generators know far more about each other than a person opening the source code for the first time would ever want.
+
+### XXII.II ES6 is Not Just Arrow Functions
+
+Strangely enough, the easiest part of the update turned out to be the new syntax. "Easy" not in the sense of "simple," but at least "having a clear place in the architecture."
+
+The lexer receives new tokens, the parser gets new nodes, and the compiler learns a few new ways to lower them into existing or augmented bytecode. This is how binary and octal literals, template strings, shorthand properties, default parameters, `rest`, and `spread` appeared. Even classes, ultimately, are just a very complex way to create functions and prototype objects; most of the necessary machinery for them already existed.
+
+Where the JIT couldn't express a new construct, I used the fallback path envisioned by the original authors: the function simply remained in the interpreter. This is how generators work, as they need to halt on `yield`, save their register frame, and resume later. The same goes for `async` functions, references to `new.target`, certain functions with complex parameters, and—as we'll see below—proper tail calls. The old JIT wasn't rewritten entirely for the sake of a new feature, but the engine as a whole didn't lose its acceleration either.
+
+There was a separate temptation regarding regular expressions: to throw out their custom compiler entirely and plug in a modern external library. This seemed reasonable right up until I read the specification: JavaScript regexes are required to expose `lastIndex`, flags, capture groups, constructor properties, and the order of calls; they must allow method overriding via `Symbol` and interact with string functions in highly specific ways. PCRE or RE2 would bring completely different semantics. So the native regular expression compiler (including its insane dedicated JIT) stayed put—it was simply taught the `u` and `y` flags, new matching rules, and the `Symbol.match`, `Symbol.replace`, `Symbol.search`, and `Symbol.split` protocols.
+
+But then I ran out of constructs that could "just be added," and hit the rules that force you to overhaul the old ones.
+
+Take a normal assignment:
+
+```js
+object[key()] = value();
+```
+
+The specification demands that we first evaluate `object`, then call `key()` exactly once, save the resulting **reference to the destination**, and only after that call `value()`. There are reasons for this: `value()` might delete a property, swap a prototype, revoke a Proxy, trigger the garbage collector, or entirely destroy the environment where the name was resolved. If you re-search the object or re-evaluate the key after the right-hand side executes, you get a completely different program.
+
+In many places, the old compiler didn't store a reference, but a *way to find it later*. For ES5.1, this was almost always sufficient; ES2015 made evaluation order observable much more frequently. I had to teach the bytecode to lock in the base, the key, and the lexical environment in advance, hold them in root registers during arbitrary user code execution, and then perform the write to the exact destination the original expression pointed to.
+
+The same story repeated with `delete`, destructuring, default parameter evaluation, `eval`, `with`, `super`, iterators, and constructors. Perhaps the hardest part of ES2015 is that between two already-existing actions, the standard now wedges a third.
+
+Asynchrony forms another layer entirely. `Promise` required a global microtask queue, synchronized with the DOM and the browser's message loop. Modules required not just `import` and `export` in the parser, but a file graph loader, CORS handling, the `<script type="module">` lifecycle, and proper error delivery. Generators and `async`/`await` demanded suspendable register frames.
+
+Through all this, the foundation was not replaced. The parser remained Carakan's parser, the bytecode remained its bytecode, the objects remained its compact objects, the garbage collector remained its collector, and OOM handling still returns `OP_STATUS` or routes through `LEAVE`/`TRAP`. The new semantics were grafted onto the old organs, rather than transplanted along with a foreign engine.
+
+### XXII.III Objects You Cannot Trust
+
+If I had to pick a single ES2015 feature capable of ruining the day of any JavaScript engine author, it would be `Proxy`.
+
+A regular object in Carakan is predictable. If the internal class says that `x` is located at offset 24, the JIT can check the class and read memory at offset 24. This is the bedrock of the object model's performance.
+
+Proxy turns almost any operation on an object into a call to user-defined JavaScript:
+
+```js
+const p = new Proxy(target, {
+    get(object, name, receiver) {
+        console.log(name);
+        return Reflect.get(object, name, receiver);
+    }
+});
+```
+
+Now reading `p.x` might output text, mutate `target`, invoke another Proxy, trigger garbage collection, throw an exception, or revoke `p` itself. The same applies to writing, deleting, `in` checks, fetching prototypes, enumerating keys, invoking functions, and `new`. The optimization "we already know what is here" becomes inherently flawed.
+
+Traps alone aren't enough. The standard aggressively guards the invariants of the real object. A Proxy is not allowed to report that a non-existent property is non-configurable, hide a non-configurable property during enumeration, return a different prototype for a non-extensible object, or return a primitive from a constructor. This means that after an arbitrary trap call, the engine is obligated to re-verify the target—even though it might have mutated during the call.
+
+The work was split into three layers. First came an internal exotic object with revocation capabilities, conservative invalidation of old caches, and a state pinned for the garbage collector. Next, eleven groups of operations regarding properties, prototypes, extensibility, and keys were routed through it. And only at the very end did we expose the public `Proxy`, invocation, construction, and `Proxy.revocable`. Until then, the constructor was intentionally kept hidden: a partial Proxy is worse than no Proxy because it looks functional but breaks invariants in places we haven't reached yet.
+
+Proxy-functions were especially nasty. Carakan's native backends have fast paths for known built-in functions—for example, a dedicated identity check for `Function.prototype.apply`. A Callable Proxy cannot be mistaken for such a function, even if it wraps it: the trap must fire first. I had to inject protection into all the corresponding fast paths in x86, ARM, and MIPS.
+
+### XXII.IV How to Kill a Calling Function Without Breaking Anything
+
+The single hardest feature turned out to be neither classes, nor modules, nor even Proxy. It was proper tail calls.
+
+In a strict mode function, a call is in a tail position if its result immediately becomes the result of the function itself:
+
+```js
+"use strict";
+
+function contains(node, value) {
+    if (!node)
+        return false;
+    if (node.value === value)
+        return true;
+    return contains(node.next, value);
+}
+```
+
+A normal call adds a new frame to the stack: local variables, arguments, return address. A hundred thousand list nodes will create a hundred thousand frames and end in a stack overflow. [ECMAScript 2015 demands](https://262.ecma-international.org/6.0/#sec-tail-position-calls) that a tail call must not retain the caller's frame.
+
+This requirement is so inconvenient that its implementation in WebKit earned [its own dedicated article and a specific debugging mechanism called ShadowChicken](https://webkit.org/blog/6240/ecmascript-6-proper-tail-calls-in-webkit/), while other engines have preferred to ignore it for years. But Opera was always famous for the completeness of its standard support, so skipping it wasn't an option for us.
+
+First, the compiler learned to mark tail positions. This isn't just a text search for `return f()`: a call might hide inside a branch of a conditional expression, a logical operator, or a comma operator, but it must not appear inside a generator or in places where the result still needs processing.
+
+Next, the interpreter learned not to push a new frame, but to **replace the current one**. Sounds simple: since the calling function is no longer needed, free its registers and launch the next one. But before destroying the frame, you might need its arguments; a closure might be holding onto its local variables; the debugger expects a correct sequence of events; the garbage collector needs to see live values; a constructor might still need to continue after `super()`. And any allocation along this path might trigger an OOM, after which the browser is obligated to gracefully return an error without crashing.
+
+Finally, a tail call might not target a normal JavaScript function. The target could be a built-in function, a bound function, `Reflect.apply`, a callable Proxy, or a DOM-provided function. For these, we needed a trampoline: it repeats the dispatch as long as the chain remains a tail call, without inflating either the register stack or the C++ stack. As a result, mutual recursion can bounce infinitely between regular, bound, built-in, and proxied functions while maintaining a constant memory footprint.
+
+### XXII.V "A Minor Formality"
+
+There was just one minor formality left: proving that all of this is actually ES2015.
+
+The official [Test262](https://github.com/tc39/test262) suite lives alongside the language. A test added to the `Array` directory today might check a rule from 2024, even though arrays themselves existed in 1997. Not every old test has an `es6id` tag, the modern section tag doesn't indicate the edition, and feature tags over time merge the original capability with its later extensions. You can't just take today's Test262 and grep the files for the word `ES6`.
+
+This led to a paradoxical task: before finishing the implementation of the standard, I had to **reconstruct the standard's requirements suite itself**.
+
+To do this, I wrote a classifier that scrutinizes every test for the language, built-ins, and Annex B. Identification was based on the existing `es5id`/`es6id` tags, section numbers from the official 6th edition, and feature tags. On top of this went explicit exclusions for things that appeared later: `BigInt`, the `v` regex flag, `Object.values`, `Array.prototype.flat`, the late semantics of TypedArray, modified `Date` rules, `Function.prototype.toString`, and dozens of less obvious amendments. ECMA-402 with the `Intl` object is classified separately and is not included in the core language results.
+
+The audit yielded **25,664 files**, unrolling into **48,414 cases**—since many source files run separately in normal and strict modes.
+
+But it wasn't quite that simple. For example, I found a couple dozen tests for later specifications that the engine was passing for reasons entirely unrelated to the actual logic. Perhaps a coincidental match in edge cases; either way, all such "green" tests had to be manually reviewed to exclude "phantom" successes.
+
+### XXII.VI What Can Carakan Do Now?
+
+The short answer: Carakan now passes the entire applicable set of requirements for the **6th Edition of ECMA-262**.
+
+This isn't just about the obvious checklist: classes, arrows, `let`/`const`, template strings, destructuring, modules, generators, iterators, `Promise`, `Symbol`, `Map`, and `Set`. It also includes Proxy and Reflect, typed arrays and ArrayBuffer, well-known symbols, new built-in object rules, Unicode in strings and regexes, Annex B for legacy web compatibility, scoping rules, `eval`, realms, and proper tail calls. And the `async`/`await` constructs we added along the way actually step beyond ES2015 and belong to ES2017.
+
+Naturally, no test suite can definitively prove the absence of unknown bugs in every line of a specification. A more accurate practical statement would be: all identified and classified requirements of the edition are covered, and their entire reproducible set passes. Should a gap be discovered, we have clear tools to fix it without blurring the boundaries of the standard.
+
+For the practical web, this is a colossal leap. Scripts no longer vanish entirely at the first arrow or `class`; libraries don't strictly need to bundle their own Promise polyfills; an app can load a module graph and use the standard iteration protocol. Thanks to this, we can now run the modern WPT testing infrastructure without Babel transpilation.
+
+But this should not be read as "Opera now supports modern JavaScript." No.
+
+The full, locked version of today's Test262 contains **92,886 cases**. Carakan executes 89,908 of them and passes **55,246**; 34,662 end in failure, and another 2,978 are blocked by the test harness environment. Within those failing red lines lie the subsequent eleven years of language evolution: `BigInt`, public and private class fields, async iteration, `SharedArrayBuffer` and `Atomics`, new Array and Promise methods, late RegExp modes, dynamic import, top-level await, `WeakRef`, `Temporal`, and much more.
+
+Even the category names in a modern report can be misleading. If there are failures in the `class` group, it doesn't mean 2015-era `class` is broken: Test262 lumps private fields, static blocks, decorators, and later refinements into that same group. Therefore, "partial support" on a feature detector and exact compliance with the 6th edition can absolutely be true at the same time—they answer different questions.
+
+Separately missing is the full **ECMA-402 Internationalization API**, i.e., `Intl`. It was never part of Carakan and is not part of ECMA-262. A fixed `localeCompare`, platform-powered date formatting, and Unicode tables are no substitute for `Intl.Collator`, `Intl.DateTimeFormat`, locale resolution rules, and megabytes of CLDR data. A separate path involving ICU has been chosen for that, which is a massive undertaking on its own; crediting it to the completed ES2015 milestone would be dishonest.
+
+There are also performance caveats. Generators, `async` functions, certain complex parameters, and functions with proper tail calls remain in the interpreter. Proxy, by its very nature, blocks several object fast paths. The new code runs correctly, but doesn't always pass through the JIT that helped Carakan outpace competitors in 2010. The JIT compiler for all this will effectively have to be written from scratch, and that is a task of such complexity that I can't even begin to estimate it. Logic and caution dictate that I only tackle the JIT (if I tackle it at all) once the entire JS implementation has been fully ironed out. And only after stocking up on sanity.
+
+Finally, JavaScript is only one layer of the browser. Passing the language specification doesn't magically add CSS Grid, Shadow DOM, HTTP/2, and missing Web APIs. It removes one fundamental barrier and allows the page to reach the next one.
+
+## XXIII. The Player That Plays Nothing
+
+Opera's multimedia support is built on GStreamer 0.10, which desperately needed an update (I'll explain why). Initially, I thought it would be a job similar to the OpenSSL migration, just on a larger scale.
+
+Oh, how wrong I was.
+
+You can't update GStreamer the same way you update, say, an image decoding library. It's not a codec and not a standalone player; it's a media pipeline constructor: one element receives bytes, another recognizes the container, the next ones decode audio and video, others convert formats, sync streams, and hand the result off to an audio device or the application. Opera hooked into this constructor from two sides simultaneously: it added two of its own elements, replaced parts of several third-party plugins, and wired GStreamer's multi-threaded model into Presto's single-threaded core. The integration turned out to be quite convoluted (though surprisingly well-engineered; I'll dissect it below), and that is the first hurdle. The second is that GStreamer 1.x is completely incompatible with 0.10. Or, at least, it looks that way.
+
+To start, we need to understand where the media player actually resides in the browser. The answer "in the `media` module" is logical, obvious, and not entirely true.
+
+`modules/media` implements the behavior of the HTML `<audio>` and `<video>` elements: loading states, `play()` and `pause()`, events, buffered ranges, seeking, volume, source selection, and relationships with the network cache. It knows that video must stall if there isn't enough data, and that after a seek, it must wait for a new frame. **It does not know how to decode that frame.**
+
+Beneath it lies the platform interface `OpMediaPlayer`. This is a clean boundary between Presto's logic and the specific multimedia framework. The core passes a data source to the player and asks it to start, stop, seek, or return the latest frame as an `OpBitmap`; coming back the other way are messages about duration changes, new video dimensions, playback completion, and errors. Nearby lives `OpMediaManager`, which answers questions like "can we play `video/webm` with VP8 and Vorbis?" and instantiates players.
+
+Finally, the platform backend implements this interface. In the available Opera 12 configuration, there was exactly one: **GStreamer**. Not DirectShow for Windows or something specific for Linux, but a single, shared codebase in `platforms/media_backends/gst`.
+
+For code written between 2008 and 2011, this is an exceptionally solid architectural approach, and it massively simplified the task. The HTML media code and the public platform interface didn't need rewriting: the entire operation took place on the other side of an already existing seam.
+
+### XXIII.I A Bit of Digging Around GStreamer
+
+When this backend was written, GStreamer 0.10 was the primary stable branch of the framework. The 1.0 branch would only appear in September 2012, and it was [officially declared incompatible](https://gstreamer.freedesktop.org/news/#2012-09-24T18:00:00Z) from its very first release. The design of Opera's code began several years prior. Therefore, choosing 0.10 wasn't an outdated or conservative choice: **no other mature GStreamer existed at the time.**
+
+The choice of GStreamer itself was also entirely rational. The browser didn't want to implement its own Ogg and WebM demuxing, Theora, Vorbis, and VP8 decoding, audio output, media clocks, queuing, and A/V sync. GStreamer already knew how to do all this, and equally well across multiple operating systems. Opera only had to solve two browser-specific problems: where to get the bytes, and where to put the decoded video frame.
+
+For the first task, Opera wrote a custom element called `operasrc`. It couldn't just hand GStreamer the raw URL: if it had, GStreamer would have gone to the network itself. Instead, `operasrc` requested the required byte range from `OpMediaSource`, which read it from Opera's already existing network subsystem. The browser part remained with the browser; the player part only received the necessary resources.
+
+For the second task, `operavideosink` was created. A normal video player can open its own window or draw directly to a system surface. A browser cannot do this: the video must participate in page layout, get clipped, overlapped by other elements, scaled, and passed through the VEGA graphics engine. Therefore, `operavideosink` grabbed the decoded frame, converted it into an `OpBitmap`, and then Opera painted it as part of the document. Audio, by contrast, didn't require the renderer's involvement and went through the standard `audioconvert ! audioresample ! volume ! autoaudiosink` chain straight to the system audio output.
+
+A separate issue was threading. GStreamer processes data in its own worker threads, while Opera's core is generally not thread-safe. Because of this, the backend established a strict rule back then: **never call Opera directly from GStreamer**. A worker thread would post a read request, wake up Opera's main thread, and wait for a response; messages from GStreamer were collected via the `GstBus`, without any callbacks deep into the engine. Memory copying was kept to a minimum, but the ownership boundary was strictly observed.
+
+This explains the seeming redundancy of the original implementation. `operasrc` and `operavideosink` are two minimally sufficient adapters between subsystems with irreconcilable rules regarding data ownership, threading, and object lifecycles.
+
+### XXIII.II Linux, Windows, and One Little DLL
+
+The backend's source code was shared, but it was shipped fundamentally differently on different platforms.
+
+On Linux, Opera expected GStreamer 0.10 to be in the system. Headers and libraries came from distro packages; plugins were found via the standard GStreamer registry. This aligned with the Linux tradition: the multimedia stack is shared across applications, and the distro updates it and decides which codecs are legally permissible to distribute.
+
+On Windows, there was nothing to rely on, so Opera carried its own bundled GStreamer 0.10.x for both x86 and x64. And this wasn't a standard distro build: the central `gstreamer.dll` was a linked combination of several libraries, accompanied by eleven hand-picked plugins, and WebM support was statically compiled straight into `Opera.dll`.
+
+Moreover, Opera didn't link against GStreamer in the traditional way. The names of the required functions were stored in `.symbols` files, a script generated a pointer table, and `OpDLL` loaded the libraries at runtime. If GStreamer was missing or even a single symbol was absent, the browser still launched—the media backend was simply marked as unavailable. For Linux, this made multimedia an optional dependency, and for Windows, it allowed keeping a bundled set of libraries next to the browser without registering them globally in the OS.
+
+Format-wise, Opera adhered to the free codec policy of the era: Ogg with Theora/Vorbis, WebM with VP8/Vorbis, and WAV. MP4, H.264, and AAC were intentionally excluded due to patent and licensing risks. To guarantee support for the then-young WebM format, a forked Matroska demuxer and a VP8 plugin were pulled into the tree, along with the full libvpx 1.1.0. This was a massive codebase: thirteen thousand lines of code, plus 31 megabytes of libvpx source, requiring the `yasm` assembler and dedicated build infrastructure. But the payoff was that the result didn't depend on whether a specific Linux distro had gotten around to adding the new format yet.
+
+### XXIII.III The Death of GStreamer 0.10
+
+In September 2012, GStreamer 1.0 was released. The authors warned that the new branch was API/ABI incompatible with 0.10, although both could be installed in parallel. In March 2013, an even blunter announcement followed: [GStreamer 0.10 is no longer supported](https://gstreamer.freedesktop.org/news/#2013-03-15T10:00:00Z), there will be no new releases, and fixes will not be backported. By a twist of historical irony, this happened almost exactly when Presto was frozen.
+
+Initially, this wasn't a problem: distros still had 0.10 packages, and the Windows bundle shipped with the browser. And then Presto and GStreamer 0.10 died, and it stopped mattering.
+
+In modern Debian, GStreamer 0.10 packages have long vanished, and a parallel 1.x installation doesn't help the old app because, for all practical purposes, it's a different library with different names and plugins. Opera's dynamic loader looks for `libgstreamer-0.10`, fails to find it, and disables the backend, stripping the browser of `<audio>` and `<video>` support.<br />
+On Windows, things are slightly better: as long as the old DLLs compile, audio and video continue to work—at the exact same level they did fourteen years ago: no Opus, no VP9, no modern container fixes.
+
+### XXIII.IV Why GStreamer Again?
+
+The most natural question is: if the port is this complicated, why not throw GStreamer out entirely? I considered the options.
+
+— **FFmpeg**. It's modern, ubiquitous, and perfectly decodes almost everything. But FFmpeg is primarily a set of libraries for handling formats and codecs. You can extract audio samples and video frames from it, but beyond that, the browser still needs queues, clocks, A/V sync, pause/seek management, and actual output via ALSA or PulseAudio on Linux and Windows API on Windows. There is no universal, cross-platform audio layer in the Presto tree for this. Replacing GStreamer with FFmpeg would mean not just swapping a library, but writing half a media player from scratch for two platforms.
+
+— **System APIs**: Media Foundation on Windows, GStreamer on Linux. Technically possible, and the `OpMediaPlayer` interface explicitly permits different implementations (which was surely used somewhere, but without the platform source code, we'll never know). In practice, we'd end up with two massive backends with different format support, different bugs, different buffering behaviors, and double the testing cost. A dubious prospect.
+
+— **Plugins**. The idea of shoehorning multimedia support this way sounds bizarre, but for the sake of curiosity, I looked into it. And indeed, such a mechanism actually exists: a site could explicitly embed an installed NPAPI plugin—VLC, QuickTime, or something else—inside a separate `<object>`. But NPAPI has been dead in all major browsers for years, not to mention that such a hack would clearly violate all module boundaries for a dubious payoff.<br />
+For the future: the interface features a `CanPlayURL()` method—the platform player can declare that it knows how to open, say, `rtsp://` entirely on its own, bypassing Opera's network cache. It's a handy extension point, but having the ability to write such code someday and actually having that code are two different things.
+
+— Finally, we could **extract decoding** into a separate process via `OpComponent`, completely writing the transfer of frames, audio, range requests, and playback state over a new IPC protocol. From a security standpoint, this is actually the preferred end-state architecture: a parser bug shouldn't compromise the whole browser. The catch is that `OpComponent` itself isn't currently in a state to allow this, and finishing it is a project even larger than reviving the multimedia backend.
+
+Which brings us back to GStreamer 1.x. It retains the main advantage of the old solution: a single media pipeline for both platforms, with ready-made demuxers, decoders, clocks, and audio output. It allows us to leave the `OpMediaPlayer` interface, the network cache, and HTML media untouched. And, importantly, it doesn't force us to expand the roster of bundled patent-encumbered codecs: Windows can be supplied with only select free plugins, while Linux uses whatever the distro or user has authorized and installed.
+
+## XXIV. Time to Change the Record
+
+The official [guide to porting from GStreamer 0.10 to 1.0](https://gstreamer.freedesktop.org/documentation/application-development/appendix/porting-1-0.html) cheerfully reports that a simple application can be ported in under a day. This is true.<br />
+It is also completely useless information for an application that implemented two of its own custom GStreamer elements and dug deep into the buffer memory model.
+
+### XXIV.I The Easy Eighty-Eight Percent
+
+Work began with an inventory. Opera's dynamic loader used 140 functions from GStreamer and GLib. Of those, **122 survived in GStreamer 1.x**. This is nearly 88 percent, and these were exactly the easy part.
+
+The script generating the symbol tables was migrated to Python 3 (I've lost count of how many python automations I've rewritten), and the loader was reconfigured for `gstreamer-1.0`, `gstbase-1.0`, `gstvideo-1.0`, `gstapp-1.0`, and GIO. Along the way, I discovered that the old declaration parser was happy to accept a function *call* as a function *declaration*; this had to be fixed, otherwise the generator produced a convincing-looking but incorrect signature. Loading remains dynamic: Opera still doesn't link against GStreamer import libraries and rolls back the initialization entirely if the set is incomplete.
+
+Many of the changes were indeed mechanical. `decodebin2` became `decodebin`, the `new-decoded-pad` signal became a standard `pad-added`, `ffmpegcolorspace` was replaced by `videoconvert`, and the old `video/x-raw-rgb` and `video/x-raw-yuv` merged into `video/x-raw`. Direct access to `GstBuffer` fields was replaced by memory mapping via `gst_buffer_map()`, and a frame now arrives as a `GstSample`, which holds the buffer and caps separately. All of this is well-documented and fairly quick to fix.
+
+The problem lay in the remaining eighteen symbols. They weren't just a random assortment of deleted functions: almost all of them pointed to three architectural fault lines—the data source, video buffers, and the byte-to-time index mapping.
+
+GStreamer 1.0 broke compatibility specifically for this. [The release announcement](https://gstreamer.freedesktop.org/news/#2012-09-24T18:00:00Z) lists a new memory model, extensible buffer metadata, the separation of caps negotiation from memory allocation, and stricter dynamic pipeline handling. These are excellent internal improvements for the framework, but for Opera, which inherited from `GstBuffer` and managed its freeing, it meant the foundation had been demolished.
+
+### XXIV.II A Source That Must Be Able to Return
+
+At first glance, `operasrc` seemed easiest to replace with the standard [`appsrc`](https://gstreamer.freedesktop.org/documentation/app/appsrc.html). The element seems tailor-made for this: the app receives `need-data`, pushes bytes into a queue, and responds to `seek-data` when seeking. I initially did exactly this.
+
+Linear playback worked. Then I found out that Ogg duration was calculated incorrectly, and arbitrary seeking was completely broken. In push mode, `appsrc` sequentially shoves data forward—which is enough to eventually reach the end of the file, but demuxers usually prefer pull mode: they request specific byte ranges, peek at the end of the container, jump back to sample tables, and read a specific keyframe. The old `operasrc`, being a subclass of `GstBaseSrc`, supported exactly this contract.
+
+`appsrc` documents `seekable` and `random-access` modes, so the next obvious step was to enable one of them. On actual GStreamer 1.26.2, both variants stalled our pipeline in the `READY` state: `decodebin` didn't open a single offset, duration never populated, and playback didn't start. This is one of those cases where a property existing in the manual doesn't prove an element's viability for a specific pull-mode contract.
+
+So I tried going the same route Opera's engineers took back in the day: write a custom `GstBaseSrc` subclass, effectively `operasrc` version 2. Naturally, only after it was written and successfully running did I notice the standard [`giostreamsrc`](https://gstreamer.freedesktop.org/documentation/gio/giostreamsrc.html), which did the exact same thing, only better. As much as I love reinventing the wheel, the correct move was to use `giostreamsrc`—not so much for speed, but because GStreamer already knows how to manage `GstBaseSrc` states, pull mode, cancellation via `GCancellable`, and unblocking on stop. Plus, it's cleaner architecturally: Opera is left with just a data adapter—`GstOperaInputStream`.
+
+Interestingly, **WebKit arrived at almost the exact same solution.** WebKit's GStreamer backend also eventually moved away from a simple `appsrc` to a custom source that adapts the GStreamer stream to the browser's network layer. This doesn't prove it's the *only* solution, but it perfectly validates the nature of the problem: a browser resource is neither a local file nor a standard push-stream, but an asynchronous cache with arbitrary byte ranges and strict thread affinity.
+
+The new bridge works almost like the old one, but the boundary is narrower. A GStreamer thread calls `read()` on our `GInputStream`. Under a lock, it publishes the exact offset and size, fires a message to Opera's main loop, and goes to sleep. The main thread reads the range from `OpMediaSource`, returns the bytes, and wakes GStreamer up. Absolutely no network or caching code executes in a foreign thread.<br />
+Curiously, GStreamer checks the object's seekability not via some flag, but by the presence of the `GSeekable` interface. If the data size is unknown or the stream is linear, `OpMediaSource` simply shouldn't create this interface at all.
+
+The nastiest part of such a bridge is teardown. When a page closes, GStreamer might be waiting for bytes, the main thread might be detaching callbacks, and the player thread might be waiting for GStreamer to terminate. The wrong order yields a perfect deadlock. Therefore, the adapter is first forced into an abort state, waking up all waiting parties, then the pipeline is stopped, and only after that are objects freed. In the old code, there was already a comment near the equivalent spot stating that `gst_operasrc_quit` *must* happen before `g_thread_join`. That comment remains 100% relevant even with the foundation rebuilt, though the function names have changed.
+
+### XXIV.III A Buffer You Cannot Inherit From
+
+With the video sink, things turned out exactly the opposite. Its behavior was simple, but its implementation was hard-welded to GStreamer 0.10.
+
+The old `operavideosink` inherited from `GstVideoSink`, accepted frames in xRGB format, and held onto the last one. To reuse memory, it also created its own custom buffer type inheriting from `GstBuffer`: an overridden `finalize` didn't free the memory, but instead returned the object to an internal pool. In 0.10, `GstBuffer` supported inheritance via GType; in 1.x, the buffer became a special mini-object with detached `GstMemory` blocks and extensible metadata. You can no longer inherit from it via GType, `buffer_alloc` vanished from the base sink, and caps are no longer bolted onto every buffer the old way.
+
+Fortunately, the new architecture features a standard [`appsink`](https://gstreamer.freedesktop.org/documentation/app/appsink.html): it pushes ready `GstSample`s into a bounded queue, and the app pulls them at its own pace. The custom `operavideosink` wasn't needed at all. GStreamer simply reports when a sample is available; Opera's main thread safely dequeues it, verifies the caps and stride, maps the memory, and copies the pixels into an `OpBitmap`.
+
+The copy is intentional. It would be nice to hand GStreamer a pointer directly to `OpBitmap` memory, but the framework might hold references to the buffer long after Opera considers the frame processed. Without a new ownership contract, this ends either with a use-after-free or a picture that the decoder is actively overwriting while it's being drawn. For true zero-copy, I'd have to change the `OpMediaPlayer` interface itself, not just the backend; a worthy optimization, but deferred for now.
+
+For the frontend, nothing changed: VEGA still receives a standard `OpBitmap`, and the HTML element still learns about the new frame via `OnFrameUpdate`.
+
+### XXIV.IV The Index That Is No More
+
+The final incompatibility was the least obvious and proved to be the most insidious.
+
+HTML media doesn't just ask the player for the current position; it also asks which ranges are already buffered. The network cache knows ranges in bytes; the page interface expects them in seconds. The old GStreamer populated a `GstIndex`, where the demuxer saved mappings like "byte 1,247,391 = time 5.2 seconds". Opera grabbed the closest points before and after the cache boundary and interpolated between them. If there was no index, it used the average stream bitrate over the whole file.
+
+In GStreamer 1.x, `GstIndex` was removed with no direct replacement. You can query an element via `GST_QUERY_CONVERT`: translate this byte offset to time, or vice versa. But querying the top-level `pipeline` yields an unexpected result—the audio sink might answer, assume the byte count refers to uncompressed PCM, and calculate a completely useless duration. You must query the external container's demuxer specifically.
+
+`decodebin` creates this demuxer dynamically on a worker thread and destroys it just as dynamically during state changes. Opera now tracks the first suitable element, holds a strong reference to it, and sends the query directly. Crucially, the main thread *cannot* wait for GStreamer to finish a seek, flush, or pipeline destruction: doing so turns the index fix right back into a deadlock. So the code tries to grab a non-blocking recursive state lock. If successful—it asks the precise query. If not—it falls back to a safe linear estimate.
+
+Accuracy depends on the container. `qtdemux` can answer using sample tables, WAV has a constant bitrate, but the current `oggdemux` and `matroskademux` don't provide the necessary non-linear mapping for the entire resource. Thus, for Ogg and WebM, buffer boundaries are estimated proportionally to file size, with the absolute start and end hard-pinned to zero and max duration. Seeking might still be slightly imprecise, but this is the best I could come up with.
+
+### XXIV.V Minus 260 Thousand Lines
+
+And with that, we're seemingly done. And as is always the case after such a migration, things got a bit lighter.
+
+The source code for GStreamer itself departed the repository: minus **a thousand files and 260,000 lines**. The GStreamer plugin, the forked demuxer and decoder, libvpx 1.1.0, the vendored headers, both Windows runtimes, and their build targets—they are gone. `yasm` is no longer required, and build times dropped by about twenty percent. But GStreamer's source code is still needed for the build—the package just has to be installed separately, roughly the same way we already handle the OpenSSL sources.
+
+The Linux build was tested with GStreamer 1.26.2 from Debian. It loads system libraries and reads the system plugin registry, so the exact format support depends on what the distro provides and what the user has added.
+
+Windows received its own minimal runtime based on the official GStreamer 1.28.5 MSVC release. It includes 24 core DLLs, 17 selected plugins, the helper `gst-plugin-scanner`, GLib and codec dependencies, and a local Visual C++ Runtime. For each architecture, this resulted in 42 binaries: about 15.5 MB for x64 and 12.9 MB for x86. The lineup is limited to GIO input, Ogg/Theora, WebM/VP8 or VP9, WAV, A/V conversion, and DirectSound audio output. H.264 and AAC decoders are intentionally absent.
+
+Why not just copy the entire official directory? Because "installing GStreamer" means installing far more than one library. Plugins are discovered via the registry and a separate scanner; DLLs depend on GLib, libffi, PCRE2, ORC, zlib, and codecs, and a randomly included plugin alters the response of `canPlayType()` and the browser's licensing posture. A minimal whitelist makes the Windows version's capabilities reproducible.
+
+At the same time, you can't just cherry-pick individual DLLs blindly: GStreamer expects its own directory structure, and the Windows dynamic loader might find an incompatible system dependency before the local one. Therefore, Opera first atomically loads and pins the full approved dependency set from its directory, then spins up GStreamer, explicitly pointing it to the local plugins and scanner paths. If any mandatory file fails to load, we aren't left with a half-initialized runtime—the entire operation rolls back.
+
+It works exactly as it was intended to back then, only better.
+
+## XXV. What's Next?
+
+And here is where I honestly don't know what to promise. The obvious next step is polishing ES6, as there are still plenty of rough edges. Very likely—Shadow DOM. Some incidental CSS improvements are almost guaranteed, but probably nothing massive.
+
+Along the way, I've been poking around in Quick UI. It's built brilliantly from a technical standpoint, but Opera's internal UI design language is quite dated, and there are a few things I'd like to change.
+
+I also want to touch up the internal debugger. Either improve what's built-in (which isn't much) or resurrect Dragonfly.
+
+The issue isn't *what* to do next—the horizons for applying effort are truly infinite. The issue is *when* each of these changes will reach a sane, usable state. All these features are massive, labor-intensive, and incredibly fascinating.
+
+<nav aria-label="Bottom navigation">
+  <a href="#top">↑ Back to top</a> · <strong>English</strong> · <a href="{{ '/ru/es2015-gstreamer/' | relative_url }}" lang="ru">Русский</a>
+</nav>

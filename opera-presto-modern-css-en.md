@@ -59,5 +59,5 @@ Damn, when I wrote that JS is hard, I had no idea how much harder CSS would turn
 The whole expanse of work that has opened up... well, it's not that it stuns me into paralysis, I've seen all sorts of things over the decades. But it shifts my perspective: instead of one oddball's project, this ought to be a community project — which is difficult, given the legal status of the sources.
 
 <nav aria-label="Bottom navigation">
-  <a href="#top">↑ Back to top</a> · <strong>English</strong> · <a href="{{ '/ru/css/' | relative_url }}" lang="ru">Русский</a>
+  <a href="#top">↑ Back to top</a> · <a href="{{ '/es2015-gstreamer/' | relative_url }}" rel="next">Next: The Engine That Outpaced Chrome →</a> · <strong>English</strong> · <a href="{{ '/ru/css/' | relative_url }}" lang="ru">Русский</a>
 </nav>
