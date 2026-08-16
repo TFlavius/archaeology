@@ -72,8 +72,9 @@
   * [XXII.II ES6 — это вам не стрелочки](opera-presto-es2015-gstreamer.md#xxiiii-es6--это-вам-не-стрелочки)
   * [XXII.III Объекты, которым нельзя доверять](opera-presto-es2015-gstreamer.md#xxiiiii-объекты-которым-нельзя-доверять)
   * [XXII.IV Как убить вызывающую функцию и ничего не сломать](opera-presto-es2015-gstreamer.md#xxiiiv-как-убить-вызывающую-функцию-и-ничего-не-сломать)
-  * [XXII.V «Небольшая формальность»](opera-presto-es2015-gstreamer.md#xxiiv-небольшая-формальность)
-  * [XXII.VI Что теперь умеет Carakan?](opera-presto-es2015-gstreamer.md#xxiivi-что-теперь-умеет-carakan)
+  * [XXII.V Подчищаем хвосты](opera-presto-es2015-gstreamer.md#xxiiv-подчищаем-хвосты)
+  * [XXII.VI «Небольшая формальность»](opera-presto-es2015-gstreamer.md#xxiivi-небольшая-формальность)
+  * [XXII.VII Что теперь умеет Carakan?](opera-presto-es2015-gstreamer.md#xxiivii-что-теперь-умеет-carakan)
 * **[XXIII. Проигрыватель, который ничего не проигрывает](opera-presto-es2015-gstreamer.md#xxiii-проигрыватель-который-ничего-не-проигрывает)**
   * [XXIII.I Немного раскопок вокруг GStreamer](opera-presto-es2015-gstreamer.md#xxiiii-немного-раскопок-вокруг-gstreamer)
   * [XXIII.II Linux, Windows и одна маленькая DLL](opera-presto-es2015-gstreamer.md#xxiiiii-linux-windows-и-одна-маленькая-dll)
@@ -154,8 +155,9 @@
   * [XXII.II ES6 is Not Just Arrow Functions](opera-presto-es2015-gstreamer-en.md#xxiiii-es6-is-not-just-arrow-functions)
   * [XXII.III Objects You Cannot Trust](opera-presto-es2015-gstreamer-en.md#xxiiiii-objects-you-cannot-trust)
   * [XXII.IV How to Kill a Calling Function Without Breaking Anything](opera-presto-es2015-gstreamer-en.md#xxiiiv-how-to-kill-a-calling-function-without-breaking-anything)
-  * [XXII.V "A Minor Formality"](opera-presto-es2015-gstreamer-en.md#xxiiv-a-minor-formality)
-  * [XXII.VI What Can Carakan Do Now?](opera-presto-es2015-gstreamer-en.md#xxiivi-what-can-carakan-do-now)
+  * [XXII.V Tying Up Loose Ends](opera-presto-es2015-gstreamer-en.md#xxiiv-tying-up-loose-ends)
+  * [XXII.VI "A Minor Formality"](opera-presto-es2015-gstreamer-en.md#xxiivi-a-minor-formality)
+  * [XXII.VII What Can Carakan Do Now?](opera-presto-es2015-gstreamer-en.md#xxiivii-what-can-carakan-do-now)
 * **[XXIII. The Player That Plays Nothing](opera-presto-es2015-gstreamer-en.md#xxiii-the-player-that-plays-nothing)**
   * [XXIII.I A Bit of Digging Around GStreamer](opera-presto-es2015-gstreamer-en.md#xxiiii-a-bit-of-digging-around-gstreamer)
   * [XXIII.II Linux, Windows, and One Little DLL](opera-presto-es2015-gstreamer-en.md#xxiiiii-linux-windows-and-one-little-dll)

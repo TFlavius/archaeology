@@ -19,8 +19,9 @@ lang: en
   - [XXII.II ES6 is Not Just Arrow Functions](#xxiiii-es6-is-not-just-arrow-functions)
   - [XXII.III Objects You Cannot Trust](#xxiiiii-objects-you-cannot-trust)
   - [XXII.IV How to Kill a Calling Function Without Breaking Anything](#xxiiiv-how-to-kill-a-calling-function-without-breaking-anything)
-  - [XXII.V "A Minor Formality"](#xxiiv-a-minor-formality)
-  - [XXII.VI What Can Carakan Do Now?](#xxiivi-what-can-carakan-do-now)
+  - [XXII.V Tying Up Loose Ends](#xxiiv-tying-up-loose-ends)
+  - [XXII.VI "A Minor Formality"](#xxiivi-a-minor-formality)
+  - [XXII.VII What Can Carakan Do Now?](#xxiivii-what-can-carakan-do-now)
 - **[XXIII. The Player That Plays Nothing](#xxiii-the-player-that-plays-nothing)**
   - [XXIII.I A Bit of Digging Around GStreamer](#xxiiii-a-bit-of-digging-around-gstreamer)
   - [XXIII.II Linux, Windows, and One Little DLL](#xxiiiii-linux-windows-and-one-little-dll)
@@ -173,7 +174,54 @@ Next, the interpreter learned not to push a new frame, but to **replace the curr
 
 Finally, a tail call might not target a normal JavaScript function. The target could be a built-in function, a bound function, `Reflect.apply`, a callable Proxy, or a DOM-provided function. For these, we needed a trampoline: it repeats the dispatch as long as the chain remains a tail call, without inflating either the register stack or the C++ stack. As a result, mutual recursion can bounce infinitely between regular, bound, built-in, and proxied functions while maintaining a constant memory footprint.
 
-### XXII.V "A Minor Formality"
+### XXII.V Tying Up Loose Ends
+
+At this point I feel obliged to tell you something. After implementing proper tail calls, I suddenly caught myself wondering: why does neither V8 nor SpiderMonkey have this optimization? That is, to put it mildly, odd.
+
+But the oddity has a simpler explanation than you might expect. Tail call optimization (TCO) reuses stack frames. If an error occurs deep inside a tail-recursive chain, `Error().stack` will show you only the topmost and the bottommost function. The entire path the program took to get there vanishes. Happy debugging!
+
+On top of that, code tailored for tail recursion becomes fragile. A function written to rely on this optimization,
+
+```js
+"use strict";
+
+function myFunc(value) {
+    value = someOtherFunc();
+    return myFunc(value);
+}
+```
+
+works beautifully right up until someone does this:
+
+```js
+"use strict";
+
+function myFunc(value) {
+    value = someOtherFunc();
+    return myFunc(value) + 0;
+}
+```
+
+The semantics don't change, but the optimization stops working—and the stack overflows.
+
+To fix the problem, the Microsoft and Mozilla teams proposed a [syntactic tail calls](https://github.com/tc39/proposal-ptc-syntax) (STC) specification, which V8 backed as well. The idea was to force the programmer to state explicitly that they want TCO in exchange for losing the stack trace. For example, through new syntax:
+
+```js
+"use strict";
+
+function myFunc(value) {
+    value = someOtherFunc();
+    return continue myFunc(value);
+}
+```
+
+But that specification was never adopted into the standard.
+
+V8 supported TCO behind a flag for several years, and then all the related code was deleted.
+
+Having learned this, I took a similar route—not the deletion part, but the flag part: proper tail calls got their own toggle in `opera:config`, enabled by default.
+
+### XXII.VI "A Minor Formality"
 
 There was just one minor formality left: proving that all of this is actually ES2015.
 
@@ -187,7 +235,7 @@ The audit yielded **25,664 files**, unrolling into **48,414 cases**—since many
 
 But it wasn't quite that simple. For example, I found a couple dozen tests for later specifications that the engine was passing for reasons entirely unrelated to the actual logic. Perhaps a coincidental match in edge cases; either way, all such "green" tests had to be manually reviewed to exclude "phantom" successes.
 
-### XXII.VI What Can Carakan Do Now?
+### XXII.VII What Can Carakan Do Now?
 
 The short answer: Carakan now passes the entire applicable set of requirements for the **6th Edition of ECMA-262**.
 
