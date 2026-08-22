@@ -412,5 +412,5 @@ Windows получил собственный минимальный ранта�
 Вопрос не в том, что делать дальше — просторы для приложения сил поистине бесконечны. Вопрос в том, когда каждое изменение дойдёт до какого-то вменяемого состояния. Все эти фичи большие, трудозатратные и очень интересные.
 
 <nav aria-label="Нижняя навигация">
-  <a href="#top">↑ Наверх</a> · <a href="{{ '/es2015-gstreamer/' | relative_url }}" lang="en">English</a> · <strong>Русский</strong>
+  <a href="#top">↑ Наверх</a> · <a href="{{ '/ru/dragonfly-shadow-dom/' | relative_url }}" rel="next">Дальше: Opera Dragonfly и Shadow DOM →</a> · <a href="{{ '/es2015-gstreamer/' | relative_url }}" lang="en">English</a> · <strong>Русский</strong>
 </nav>

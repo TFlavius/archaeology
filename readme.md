@@ -88,6 +88,17 @@
   * [XXIV.V Минус 260 тысяч строк](opera-presto-es2015-gstreamer.md#xxivv-минус-260-тысяч-строк)
 * **[XXV. Что дальше?](opera-presto-es2015-gstreamer.md#xxv-что-дальше)**
 
+### Часть 6. Opera Dragonfly и Shadow DOM
+
+[Читать здесь](opera-presto-dragonfly-shadow-dom.md) · [читать на сайте](https://tflavius.github.io/archaeology/ru/dragonfly-shadow-dom/)
+
+* **[XXVI. Эпоха до F12: Alert-Driven Development](opera-presto-dragonfly-shadow-dom.md#xxvi-эпоха-до-f12-alert-driven-development)**
+* **[XXVII. Dragonfly: вещь в себе](opera-presto-dragonfly-shadow-dom.md#xxvii-dragonfly-вещь-в-себе)**
+* **[XXVIII. Что не умеет Dragonfly?](opera-presto-dragonfly-shadow-dom.md#xxviii-что-не-умеет-dragonfly)**
+* **[XXIX. История Shadow DOM и зачем он нужен](opera-presto-dragonfly-shadow-dom.md#xxix-история-shadow-dom-и-зачем-он-нужен)**
+* **[XXX. Мнимая простота](opera-presto-dragonfly-shadow-dom.md#xxx-мнимая-простота)**
+* **[XXXI. Что дальше?](opera-presto-dragonfly-shadow-dom.md#xxxi-что-дальше)**
+
 ---
 
 ## Table of Contents [EN]
@@ -170,3 +181,14 @@
   * [XXIV.IV The Index That Is No More](opera-presto-es2015-gstreamer-en.md#xxiviv-the-index-that-is-no-more)
   * [XXIV.V Minus 260 Thousand Lines](opera-presto-es2015-gstreamer-en.md#xxivv-minus-260-thousand-lines)
 * **[XXV. What's Next?](opera-presto-es2015-gstreamer-en.md#xxv-whats-next)**
+
+### Part 6. Opera Dragonfly and Shadow DOM
+
+[Read here](opera-presto-dragonfly-shadow-dom-en.md) · [read online](https://tflavius.github.io/archaeology/dragonfly-shadow-dom/)
+
+* **[XXVI. The Age Before F12: Alert-Driven Development](opera-presto-dragonfly-shadow-dom-en.md#xxvi-the-age-before-f12-alert-driven-development)**
+* **[XXVII. Dragonfly: A Thing-in-Itself](opera-presto-dragonfly-shadow-dom-en.md#xxvii-dragonfly-a-thing-in-itself)**
+* **[XXVIII. What Can't Dragonfly Do?](opera-presto-dragonfly-shadow-dom-en.md#xxviii-what-cant-dragonfly-do)**
+* **[XXIX. A History of Shadow DOM, and Why It Exists](opera-presto-dragonfly-shadow-dom-en.md#xxix-a-history-of-shadow-dom-and-why-it-exists)**
+* **[XXX. The Illusion of Simplicity](opera-presto-dragonfly-shadow-dom-en.md#xxx-the-illusion-of-simplicity)**
+* **[XXXI. What's Next?](opera-presto-dragonfly-shadow-dom-en.md#xxxi-whats-next)**

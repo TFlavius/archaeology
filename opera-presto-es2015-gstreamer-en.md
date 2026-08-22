@@ -410,5 +410,5 @@ I also want to touch up the internal debugger. Either improve what's built-in (w
 The issue isn't *what* to do next—the horizons for applying effort are truly infinite. The issue is *when* each of these changes will reach a sane, usable state. All these features are massive, labor-intensive, and incredibly fascinating.
 
 <nav aria-label="Bottom navigation">
-  <a href="#top">↑ Back to top</a> · <strong>English</strong> · <a href="{{ '/ru/es2015-gstreamer/' | relative_url }}" lang="ru">Русский</a>
+  <a href="#top">↑ Back to top</a> · <a href="{{ '/dragonfly-shadow-dom/' | relative_url }}" rel="next">Next: Opera Dragonfly and Shadow DOM →</a> · <strong>English</strong> · <a href="{{ '/ru/es2015-gstreamer/' | relative_url }}" lang="ru">Русский</a>
 </nav>
