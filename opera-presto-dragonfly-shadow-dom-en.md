@@ -29,7 +29,7 @@ These are far from the only improvements and fixes Presto received over the past
 
 Today, for any web developer, the F12 key (or `Ctrl+Shift+I`) is an unconditional reflex. Layout gone sideways? F12, click the element, fix the CSS right there in the browser. Script blew up? F12, console, click the stack trace, and you're in the debugger. Request hanging? The Network tab will break every request and response down into its parts. Modern DevTools are a dashboard that lets you inspect and change the state of any subsystem.
 
-But the web of the early 2000s was written with no instruments at all. We flew through the fog navigating by the map printed on a pack of cigarettes.
+But the web of the early 2000s was written with no instruments at all. We flew through the fog by the seat of our pants.
 
 If you didn't live through those days, you'll find it hard to believe how excruciating building and debugging even simple pages was. We had exactly one inspection tool built into the browser—the **View Source** command.
 
