@@ -12,11 +12,11 @@ lang: en
 
 # The Engine That Outpaced Chrome: Full ES2015 and a New Media Backend
 
-## Table of Contents
+## Contents
 
 - **[XXII. One Step Back, Two Steps Forward](#xxii-one-step-back-two-steps-forward)**
   - [XXII.I A JS Machine from 2009](#xxiii-a-js-machine-from-2009)
-  - [XXII.II ES6 is Not Just Arrow Functions](#xxiiii-es6-is-not-just-arrow-functions)
+  - [XXII.II ES6 Is Not Just Arrow Functions](#xxiiii-es6-is-not-just-arrow-functions)
   - [XXII.III Objects You Cannot Trust](#xxiiiii-objects-you-cannot-trust)
   - [XXII.IV How to Kill a Calling Function Without Breaking Anything](#xxiiiv-how-to-kill-a-calling-function-without-breaking-anything)
   - [XXII.V Tying Up Loose Ends](#xxiiv-tying-up-loose-ends)
@@ -93,7 +93,7 @@ Why was everything built exactly this way? Because Carakan simultaneously needed
 
 This context is vital for the rest of the story. I wasn't updating an abstract JavaScript implementation, but a highly dense mechanism where object properties, bytecode, the garbage collector, and four machine code generators know far more about each other than a person opening the source code for the first time would ever want.
 
-### XXII.II ES6 is Not Just Arrow Functions
+### XXII.II ES6 Is Not Just Arrow Functions
 
 Strangely enough, the easiest part of the update turned out to be the new syntax. "Easy" not in the sense of "simple," but at least "having a clear place in the architecture."
 

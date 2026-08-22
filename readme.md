@@ -3,7 +3,7 @@
 **Читать на сайте: [tflavius.github.io/archaeology](https://tflavius.github.io/archaeology/)**<br />
 **Read online: [tflavius.github.io/archaeology](https://tflavius.github.io/archaeology/)**
 
-**[RU](#оглавление-ru)** | **[EN](#table-of-contents-en)**
+**[RU](#оглавление-ru)** | **[EN](#contents-en)**
 
 ---
 
@@ -53,7 +53,7 @@
 * **[XV. Схватка двух якодзун](opera-presto-modern-js.md#xv-схватка-двух-якодзун)**
 * **[XVI. Как (и зачем) правильно притворяться](opera-presto-modern-js.md#xvi-как-и-зачем-правильно-притворяться)**
 * **[XVII. Патчи для всего интернета и другие безумные находки](opera-presto-modern-js.md#xvii-патчи-для-всего-интернета-и-другие-безумные-находки)**
-* **[XVIII. Что дальше](opera-presto-modern-js.md#xviii-что-дальше)**
+* **[XVIII. Что дальше?](opera-presto-modern-js.md#xviii-что-дальше)**
 
 ### Часть 4. Движок, которому нужен CSS
 
@@ -101,7 +101,7 @@
 
 ---
 
-## Table of Contents [EN]
+## Contents [EN]
 
 ### Part 1. The Engine We Lost: Digital Archaeology of Opera Presto
 
@@ -109,14 +109,14 @@
 
 * **[I. The Pre-Monopoly Era: What Opera Was and Why It's Gone](opera-presto-archaeology-en.md#i-the-pre-monopoly-era-what-opera-was-and-why-its-gone)**
 * **[II. Digital Archaeology of Three Million Lines of Code](opera-presto-archaeology-en.md#ii-digital-archaeology-of-three-million-lines-of-code)**
-  * [II.I How was Opera Built?](opera-presto-archaeology-en.md#iii-how-was-opera-built)
-  * [II.II How was Opera Written?](opera-presto-archaeology-en.md#iiii-how-was-opera-written)
-  * [II.III How was Opera Tested?](opera-presto-archaeology-en.md#iiiii-how-was-opera-tested)
+  * [II.I How Was Opera Built?](opera-presto-archaeology-en.md#iii-how-was-opera-built)
+  * [II.II How Was Opera Written?](opera-presto-archaeology-en.md#iiii-how-was-opera-written)
+  * [II.III How Was Opera Tested?](opera-presto-archaeology-en.md#iiiii-how-was-opera-tested)
   * [II.IV Who Wrote Opera?](opera-presto-archaeology-en.md#iiiv-who-wrote-opera)
 * **[III. A History of a Lie](opera-presto-archaeology-en.md#iii-a-history-of-a-lie)**
   * [III.I The Uncuttable UI Monolith](opera-presto-archaeology-en.md#iiii-the-uncuttable-ui-monolith)
   * [III.II Excuses Instead of Source Code](opera-presto-archaeology-en.md#iiiii-excuses-instead-of-source-code)
-* **[IV. Architectural Diamonds (and a bit of madness)](opera-presto-archaeology-en.md#iv-architectural-diamonds-and-a-bit-of-madness)**
+* **[IV. Architectural Diamonds (and a Bit of Madness)](opera-presto-archaeology-en.md#iv-architectural-diamonds-and-a-bit-of-madness)**
 * **[V. Defrosting and Health Check](opera-presto-archaeology-en.md#v-defrosting-and-health-check)**
   * [V.I Moving to OpenSSL](opera-presto-archaeology-en.md#vi-moving-to-openssl)
   * [V.II Updating Third-Party Code](opera-presto-archaeology-en.md#vii-updating-third-party-code)
@@ -147,7 +147,7 @@
 * **[XV. The Clash of Two Yokozunas](opera-presto-modern-js-en.md#xv-the-clash-of-two-yokozunas)**
 * **[XVI. How (and Why) to Properly Pretend](opera-presto-modern-js-en.md#xvi-how-and-why-to-properly-pretend)**
 * **[XVII. Patches for the Entire Internet and Other Insane Discoveries](opera-presto-modern-js-en.md#xvii-patches-for-the-entire-internet-and-other-insane-discoveries)**
-* **[XVIII. What's Next](opera-presto-modern-js-en.md#xviii-whats-next)**
+* **[XVIII. What's Next?](opera-presto-modern-js-en.md#xviii-whats-next)**
 
 ### Part 4. The Engine That Needs CSS
 
@@ -163,7 +163,7 @@
 
 * **[XXII. One Step Back, Two Steps Forward](opera-presto-es2015-gstreamer-en.md#xxii-one-step-back-two-steps-forward)**
   * [XXII.I A JS Machine from 2009](opera-presto-es2015-gstreamer-en.md#xxiii-a-js-machine-from-2009)
-  * [XXII.II ES6 is Not Just Arrow Functions](opera-presto-es2015-gstreamer-en.md#xxiiii-es6-is-not-just-arrow-functions)
+  * [XXII.II ES6 Is Not Just Arrow Functions](opera-presto-es2015-gstreamer-en.md#xxiiii-es6-is-not-just-arrow-functions)
   * [XXII.III Objects You Cannot Trust](opera-presto-es2015-gstreamer-en.md#xxiiiii-objects-you-cannot-trust)
   * [XXII.IV How to Kill a Calling Function Without Breaking Anything](opera-presto-es2015-gstreamer-en.md#xxiiiv-how-to-kill-a-calling-function-without-breaking-anything)
   * [XXII.V Tying Up Loose Ends](opera-presto-es2015-gstreamer-en.md#xxiiv-tying-up-loose-ends)

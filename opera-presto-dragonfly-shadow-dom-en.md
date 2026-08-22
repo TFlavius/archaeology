@@ -12,7 +12,7 @@ lang: en
 
 # Opera Dragonfly and Shadow DOM
 
-## Table of Contents
+## Contents
 
 - **[XXVI. The Age Before F12: Alert-Driven Development](#xxvi-the-age-before-f12-alert-driven-development)**
 - **[XXVII. Dragonfly: A Thing-in-Itself](#xxvii-dragonfly-a-thing-in-itself)**

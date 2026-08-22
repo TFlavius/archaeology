@@ -19,7 +19,7 @@ lang: en
 - **[XV. The Clash of Two Yokozunas](#xv-the-clash-of-two-yokozunas)**
 - **[XVI. How (and Why) to Properly Pretend](#xvi-how-and-why-to-properly-pretend)**
 - **[XVII. Patches for the Entire Internet and Other Insane Discoveries](#xvii-patches-for-the-entire-internet-and-other-insane-discoveries)**
-- **[XVIII. What's Next](#xviii-whats-next)**
+- **[XVIII. What's Next?](#xviii-whats-next)**
 
 Last time I left off with the fact that we need **ES2015**. Without upgrading Carakan (which knows ECMAScript 5.1 perfectly well, but nothing about newer specs), we won't just fail to use the modern web — we won't even be able to run many tests.
 
@@ -195,7 +195,7 @@ Fake code-signing certificates "from Microsoft" (2001), certificates with a null
 
 This mechanism was supplemented by updates via `certs.opera.com`. The documentation doesn't explain why some certificates had to be checked "on the spot," but it does mention that their validation fingerprint creation tool was called **EViL-bot** (The Extended Validation internal Logistics Bot).
 
-## XVIII. What's Next
+## XVIII. What's Next?
 
 Every applied fix opens up a dozen new necessary tweaks, and there is no end in sight. It's exhilarating and terrifying at the same time. Fortunately, AI agents don't suffer from burnout.
 

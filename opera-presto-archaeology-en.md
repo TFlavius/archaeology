@@ -16,14 +16,14 @@ lang: en
 
 - **[I. The Pre-Monopoly Era: What Opera Was and Why It's Gone](#i-the-pre-monopoly-era-what-opera-was-and-why-its-gone)**
 - **[II. Digital Archaeology of Three Million Lines of Code](#ii-digital-archaeology-of-three-million-lines-of-code)**
-  - [II.I How was Opera Built?](#iii-how-was-opera-built)
-  - [II.II How was Opera Written?](#iiii-how-was-opera-written)
-  - [II.III How was Opera Tested?](#iiiii-how-was-opera-tested)
+  - [II.I How Was Opera Built?](#iii-how-was-opera-built)
+  - [II.II How Was Opera Written?](#iiii-how-was-opera-written)
+  - [II.III How Was Opera Tested?](#iiiii-how-was-opera-tested)
   - [II.IV Who Wrote Opera?](#iiiv-who-wrote-opera)
 - **[III. A History of a Lie](#iii-a-history-of-a-lie)**
   - [III.I The Uncuttable UI Monolith](#iiii-the-uncuttable-ui-monolith)
   - [III.II Excuses Instead of Source Code](#iiiii-excuses-instead-of-source-code)
-- **[IV. Architectural Diamonds (and a bit of madness)](#iv-architectural-diamonds-and-a-bit-of-madness)**
+- **[IV. Architectural Diamonds (and a Bit of Madness)](#iv-architectural-diamonds-and-a-bit-of-madness)**
 - **[V. Defrosting and Health Check](#v-defrosting-and-health-check)**
   - [V.I Moving to OpenSSL](#vi-moving-to-openssl)
   - [V.II Updating Third-Party Code](#vii-updating-third-party-code)
@@ -77,7 +77,7 @@ The browser that ran on Windows 7, macOS, QNX, and a Sony Ericsson feature phone
 
 How was this achieved? With their own custom build system.
 
-### II.I How was Opera Built?
+### II.I How Was Opera Built?
 
 Essentially, there is no separate "Windows version" or "QNX version" in the repository—the necessary code is assembled on the fly. A build script iterates through all modules, reading their metadata (simple text files containing descriptions of which files to compile, what APIs the module exports and imports, and much more). By comparing the metadata with a given configuration, the script ultimately generates `*_jumbo.cpp` files—and these are what actually get compiled.
 
@@ -151,7 +151,7 @@ The downside is also clear. First, the combinatorial explosion: 416 features mul
 
 The feature was killed off, but the hack it once enabled lived on.
 
-### II.II How was Opera Written?
+### II.II How Was Opera Written?
 
 The layers of the browser's code can be studied endlessly. We can't view the commit history, we don't have the archive of the internal issue tracker, and we have no access to internal documentation, if it even existed. But the development culture typical of that era left its artifacts: issue tracking right in the comments, unfinished snippets of documentation next to the code, various explanations, copyrights—despite the incredibly high engineering standards, this was par for the course back then. Thanks to this, a lot becomes clear.
 
@@ -191,7 +191,7 @@ Interestingly, there was an attempt to transition to native C++ exceptions: the 
 
 By the way, judging by the modelines, they wrote this in emacs/vim. Pure console, pure hardcore!
 
-### II.III How was Opera Tested?
+### II.III How Was Opera Tested?
 
 After everything you've learned, you won't be surprised: Opera's testing system was also entirely homegrown. Tests are written in `.ot` ("Opera Test") files inside the modules. It's a domain-specific language supporting `setup` blocks, data tables, and iterations. Tests can be written in C++, ECMAScript, and can even include inline HTML blocks.
 
@@ -311,9 +311,9 @@ But this argument loses its teeth once we look at the leaked code. It only conta
 
 **Opera ASA could have open-sourced the desktop versions of the browser at any moment, but they chose not to.**
 
-## IV. Architectural Diamonds (and a bit of madness)
+## IV. Architectural Diamonds (and a Bit of Madness)
 
-As you have gathered, Opera preferred to do everything themselves whenever possible. When that wasn't an option, third-party code was integrated with no external dependencies, and sometimes with their own modifications. There's quite a lot of this code: `sqlite`, `zlib`, `libfreetype`, etc. The largest and most interesting borrowing is a fork of OpenSSL, which they heavily modified. The module is called **libopeay**, which breaks down as **lib + op**(era) **+ eay** — the initials of Eric A. Young, the author of **SSLeay**, the library that OpenSSL evolved from in 1998. The module's artifacts show that the code was ported over multiple times, starting from the late SSLeay era (versions 0.8.x) up to the 2012-current OpenSSL 1.0.0g. They didn't use the upstream source wholesale: a dedicated script carved out everything unnecessary—apps, demos, test, documentation, platform wrappers for VMS and OS/2. Then another script wrapped **each** remaining `.c` file into its own `opera_*.cpp` file—otherwise, thousands of OpenSSL C files simply wouldn't have survived the jumbo build process with its single translation units and name conflicts. After that, it was clearly massaged heavily by hand. So, even "taking something off the shelf" at Opera meant running someone else's code through their own meat grinder.
+As you have gathered, Opera preferred to do everything themselves whenever possible. When that wasn't an option, third-party code was integrated with no external dependencies, and sometimes with their own modifications. There's quite a lot of this code: `sqlite`, `zlib`, `libfreetype`, etc. The largest and most interesting borrowing is a fork of OpenSSL, which they heavily modified. The module is called **libopeay**, which breaks down as **lib + op**(era) **+ eay** — the initials of Eric A. Young, the author of **SSLeay**, the library that OpenSSL evolved from in 1998. The module's artifacts show that the code was ported over multiple times, starting from the late SSLeay era (versions 0.8.x) up to the then-current OpenSSL 1.0.0g. They didn't use the upstream source wholesale: a dedicated script carved out everything unnecessary—apps, demos, test, documentation, platform wrappers for VMS and OS/2. Then another script wrapped **each** remaining `.c` file into its own `opera_*.cpp` file—otherwise, thousands of OpenSSL C files simply wouldn't have survived the jumbo build process with its single translation units and name conflicts. After that, it was clearly massaged heavily by hand. So, even "taking something off the shelf" at Opera meant running someone else's code through their own meat grinder.
 
 But out of all of OpenSSL, Opera only used the cryptography: bignum math, RSA, DH, ciphers, hashes, X.509, and ASN.1. **The TLS protocol itself—handshakes, records, sessions—was written from scratch, entirely in-house.** OpenSSL ships with its own SSL/TLS implementation (the `ssl/` directory, files like `s3_clnt.c`, `t1_enc.c`), and they *are* in the tree, wrapped in `opera_s3_clnt.cpp`... but they are marked with the `#[external-ssl-only]` tag. On desktop, they **were never compiled at all**. The desktop browser encrypted traffic using its own custom stack—the **libssl** module.
 
