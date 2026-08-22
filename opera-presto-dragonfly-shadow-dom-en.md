@@ -7,7 +7,7 @@ lang: en
 ---
 
 <nav id="top" aria-label="Top navigation">
-  <a href="{{ '/es2015-gstreamer/' | relative_url }}" rel="prev">← Previous: The Engine That Outpaced Chrome</a> · <strong>English</strong> · <a href="{{ '/ru/dragonfly-shadow-dom/' | relative_url }}" lang="ru">Русский</a>
+  <a href="{{ '/es2015-gstreamer/' | relative_url }}" rel="prev">← Previous: The Engine That Outpaced Chrome</a> · WEEK: <a href="{{ '/' | relative_url }}" title="The Engine We Lost">I</a>—<a href="{{ '/revival/' | relative_url }}" title="The Engine We're Bringing Back to Life">II</a>—<a href="{{ '/modern/' | relative_url }}" title="The Engine That Learns">III</a>—<a href="{{ '/css/' | relative_url }}" title="The Engine That Needs CSS">IV</a>—<a href="{{ '/es2015-gstreamer/' | relative_url }}" title="The Engine That Outpaced Chrome">V</a>—<strong>VI</strong> · <strong>English</strong> · <a href="{{ '/ru/dragonfly-shadow-dom/' | relative_url }}" lang="ru">Русский</a>
 </nav>
 
 # Opera Dragonfly and Shadow DOM
@@ -154,5 +154,5 @@ The main point where effort will be applied is, of course, ECMAScript. Plenty ha
 For a while yet the browser will still look like it is stuck in 2013. But once all the core features are implemented, support for the modern web will be restored very quickly.
 
 <nav aria-label="Bottom navigation">
-  <a href="#top">↑ Back to top</a> · <strong>English</strong> · <a href="{{ '/ru/dragonfly-shadow-dom/' | relative_url }}" lang="ru">Русский</a>
+  <a href="#top">↑ Back to top</a> · WEEK: <a href="{{ '/' | relative_url }}" title="The Engine We Lost">I</a>—<a href="{{ '/revival/' | relative_url }}" title="The Engine We're Bringing Back to Life">II</a>—<a href="{{ '/modern/' | relative_url }}" title="The Engine That Learns">III</a>—<a href="{{ '/css/' | relative_url }}" title="The Engine That Needs CSS">IV</a>—<a href="{{ '/es2015-gstreamer/' | relative_url }}" title="The Engine That Outpaced Chrome">V</a>—<strong>VI</strong> · <strong>English</strong> · <a href="{{ '/ru/dragonfly-shadow-dom/' | relative_url }}" lang="ru">Русский</a>
 </nav>
