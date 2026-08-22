@@ -116,7 +116,7 @@ But that Shadow DOM was not the one we have now. The early version, later named 
 
 The stable cross-browser story only began after that. Shadow DOM v1 [arrived in Chrome 53](https://developer.chrome.com/blog/chrome-70-deps-rems) in August 2016; the new WebKit was already on show [in the first Safari Technology Preview](https://webkit.org/blog/6017/introducing-safari-technology-preview/) that spring; Firefox [enabled Shadow DOM and Custom Elements by default](https://developer.mozilla.org/en-US/docs/Mozilla/Firefox/Releases/63) only in version 63, on October 23, 2018. By that point the standalone Shadow DOM specification had been [retired](https://www.w3.org/standards/history/shadow-dom/): its concepts and algorithms went straight into the living [DOM](https://dom.spec.whatwg.org/#shadow-trees), HTML, and CSS standards.
 
-At the time Opera Presto was shut down, the technology existed only as a pair of early drafts. Had the developers managed to implement it, the entire effort would have had to be thrown away. Now, though, we can look at where WebKit/Blink/Gecko ended up evolving: explicit tree scopes and specialized traversals within them.
+At the time Opera Presto was shut down, the technology existed only as a pair of early drafts. Had the developers managed to implement them, the entire effort would have had to be thrown away. Now, though, we can look at where WebKit/Blink/Gecko ended up evolving: explicit tree scopes and specialized traversals within them.
 
 ## XXX. The Illusion of Simplicity
 
