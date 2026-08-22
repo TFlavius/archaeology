@@ -86,14 +86,15 @@ That's it. It just works. I only rewrote the builder for python 3, for the sake 
 It would be strange to expect a decade-old debugger to have any modern capabilities, though even here it isn't that clear-cut. There is more built into Dragonfly than it shows—for example, it has a subsystem for invoking the browser's selftests (it isn't used in any way, it simply exists), or ready-made JS debugger methods that never made it into the UI. But those are minor things.
 
 The list of what's missing is fairly long. Dragonfly:
-— doesn't support source maps,
-— doesn't parse WebSocket frames (although the transport protocol itself is supported),
-— has no tools for artificial throttling,
-— doesn't emulate geometry and viewports,
-— has no memory profiler (the debugger can walk objects, but doesn't collect memory information),
-— doesn't support asynchronous call stacks (logically enough, the entire existing stack is synchronous),
-— doesn't inspect animations and transitions,
-— doesn't support what Presto itself can't do: flexbox, grid, Service Workers, IndexedDB, Cache Storage, Shadow DOM, custom elements.
+
+- doesn't support source maps;
+- doesn't parse WebSocket frames (although the transport protocol itself is supported);
+- has no tools for artificial throttling;
+- doesn't emulate geometry and viewports;
+- has no memory profiler (the debugger can walk objects, but doesn't collect memory information);
+- doesn't support asynchronous call stacks (logically enough, the entire existing stack is synchronous);
+- doesn't inspect animations and transitions;
+- doesn't support what Presto itself can't do: flexbox, grid, Service Workers, IndexedDB, Cache Storage, Shadow DOM, custom elements.
 
 As a tool from 2012, Dragonfly is comparable to its contemporaries and in places better than them. Profiler granularity down to an individual CSS selector, an HTTP request builder, a list of event handlers with their sources, breakpoints on DOM events, and configurable keyboard shortcuts—all of that was ahead of the market back then, and some of it still isn't available everywhere.<br />
 In the reality of 2026 it is good enough for debugging the pages Presto is capable of displaying. It won't be enough for debugging a modern front end, but a modern front end won't load in Presto yet anyway. And the intent here is different: the errors collected in Dragonfly will help find the gaps in the engine.
